@@ -1,15 +1,25 @@
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Search from "./pages/search/Search";
+import BusinessOverview from "./pages/business_overview/BusinessOverview";
+import Loading from "./pages/loading/Loading";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img
-          src="./assets/images/aphro_logo.png"
-          className="App-logo"
-          alt="logo"
-        />
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Search />} />
+          <Route index path="/search" element={<Search />} />
+          <Route
+            index
+            path="/business_overview"
+            element={<BusinessOverview />}
+          />
+          <Route path="*" element={<Loading />} />
+          {/* Add more routes as needed */}
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

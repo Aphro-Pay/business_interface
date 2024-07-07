@@ -1,0 +1,43 @@
+.scaffold {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
+.header {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+  align-content: center;
+  font-weight: bold;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.content {
+  display: flex;
+  align-items: left;
+  padding: 0px 16px;
+}
+
+ion-fab-button {
+  --padding-start: 0px;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
+}

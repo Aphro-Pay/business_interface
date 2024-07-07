@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "../pages/authentication/verify_otp/VerifyOTP.module.css";
 import Input from "./Input";
 
 function OTPInput() {

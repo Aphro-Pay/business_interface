@@ -96,6 +96,21 @@ input {
   font-weight: 400px;
 }
 
+.header {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.scaffold {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+  padding: 0px 16px 16px 16px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

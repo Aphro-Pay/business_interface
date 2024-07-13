@@ -18,7 +18,9 @@ function RoundButton(prop) {
     <button
       className={"round-button " + prop.className}
       onClick={(e) => {
-        history.push({ pathname: prop.navigateTo, state: prop.dataToPass });
+        prop.onClick != null && prop.onClick();
+        prop.navigateTo != null &&
+          history.push({ pathname: prop.navigateTo, state: prop.dataToPass });
         e.preventDefault();
       }}
     >

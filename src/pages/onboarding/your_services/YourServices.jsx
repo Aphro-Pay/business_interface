@@ -26,7 +26,8 @@ function YourServices() {
         </div>
         <RoundButton
           text="Continue"
-          navigateTo="/success/onboarding_complete"
+          navigateTo="/staff_management"
+          //navigateTo="/success/onboarding_complete"
           dataToPass={dataToPass}
         />
       </div>

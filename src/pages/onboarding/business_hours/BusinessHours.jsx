@@ -5,6 +5,7 @@ import { IonIcon, IonPage } from "@ionic/react";
 import styles from "./BusinessHours.module.css";
 import Space from "../../../components/Space";
 import RoundButton from "../../../components/RoundButton";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function BusinessHours() {
   const daysOfTheWeek = [
@@ -16,6 +17,10 @@ function BusinessHours() {
     "Saturday",
     "Sunday",
   ];
+  const history = useHistory();
+  const editHours = () => {
+    history.push("/opening_hours");
+  };
   return (
     <IonPage>
       <div className="scaffold">
@@ -33,6 +38,7 @@ function BusinessHours() {
             <IonIcon
               icon={arrowForward}
               style={{ fontSize: "40px", color: "#879194" }}
+              onClick={editHours}
             ></IonIcon>
           </div>
         ))}

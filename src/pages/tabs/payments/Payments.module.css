@@ -1,0 +1,32 @@
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.time {
+  color: #456ea1;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.details {
+  display: flex;
+  height: 15px;
+  width: 150px;
+  font-size: 13px;
+  text-align: center;
+  padding: 13px;
+  justify-content: center;
+  align-items: center;
+}

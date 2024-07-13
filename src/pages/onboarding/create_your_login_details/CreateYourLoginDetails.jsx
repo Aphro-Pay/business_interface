@@ -16,9 +16,12 @@ function CreateYourLoginDetails() {
             " You can always change this later."
           }
         />
-        <Input hintText="Email" />
-        <Input hintText="7gy7y" />
-        <Input hintText="&bull; &bull; &bull; &bull; &bull;" />
+        <Input hintText="Email" label="Email address" />
+        <Input hintText="7gy7y" label="Set password" />
+        <Input
+          hintText="&bull; &bull; &bull; &bull; &bull;"
+          label="Confirm password"
+        />
         <div>
           Your password must include: <br />
           &#10003; 8-32 characters long <br />

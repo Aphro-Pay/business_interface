@@ -6,7 +6,9 @@ import Space from "./Space";
 function Input(prop) {
   return (
     <div className="input">
-      <label className="input-label">{prop.label}</label>
+      <label className="input-label" htmlFor={prop.label}>
+        {prop.label}
+      </label>
       <Space height="5px" />
       <div
         className={"input-border " + prop.className}
@@ -20,6 +22,14 @@ function Input(prop) {
         <input
           type={prop.type}
           placeholder={prop.hintText}
+          onChange={prop.onChange}
+          maxLength={prop.maxLength}
+          min={prop.min}
+          max={prop.max}
+          id={prop.id}
+          step="1"
+          pattern="\d*"
+          //onInput={(this.value = this.value.replace(/[^0-9]/g, ""))}
           style={{
             padding: prop.textPadding,
             width: prop.inputWidth,

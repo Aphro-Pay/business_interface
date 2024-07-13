@@ -14,6 +14,14 @@ import SetUpYourBusinessProfile from "./pages/onboarding/set_up_your_business_pr
 import UploadYourLogo from "./pages/onboarding/upload_your_logo/UploadYourLogo";
 import BusinessHours from "./pages/onboarding/business_hours/BusinessHours";
 import YourServices from "./pages/onboarding/your_services/YourServices";
+import StaffManagement from "./pages/onboarding/staff_management/StaffManagement";
+import AddStaffName from "./pages/onboarding/staff_management/AddStaffName";
+import OpeningHours from "./pages/onboarding/business_hours/OpeningHours";
+import Home from "./pages/tabs/home/Home";
+import Tabs from "./pages/tabs/Tabs";
+import AddBooking from "./pages/tabs/bookings/AddBooking";
+import TransactionDetails from "./pages/tabs/payments/TransactionDetails";
+
 import { setupIonicReact } from "@ionic/react";
 
 setupIonicReact();
@@ -22,24 +30,42 @@ function App() {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonRouterOutlet>
+        <IonRouterOutlet animated="false">
+          <Route path="/tabs/:id" component={Tabs} exact />
+          <Redirect from="/tabs" to="/tabs/home" exact />
+
+          <Route exact path="/add_booking" component={AddBooking} />
+          <Route
+            exact
+            path="/tabs/transaction_details"
+            component={TransactionDetails}
+          />
+
           <Route path="/splash" component={Splash} exact />
-          <Redirect from="/" to="/splash" exact />
-          <Route path="/login" component={LogIn} />
-          <Route path="/enter_mobile_number" component={EnterMobileNumber} />
-          <Route path="/verify_otp" component={VerifyOTP} />
-          <Route path="/success/:state" component={Success} />
+          <Route path="/login" component={LogIn} exact />
+          <Route
+            path="/enter_mobile_number"
+            component={EnterMobileNumber}
+            exact
+          />
+          <Route path="/verify_otp" component={VerifyOTP} exact />
+          <Route path="/success/:state" component={Success} exact />
           <Route
             path="/create_your_login_details"
             component={CreateYourLoginDetails}
+            exact
           />
           <Route
             path="/set_up_your_business_profile"
             component={SetUpYourBusinessProfile}
+            exact
           />
-          <Route path="/upload_your_logo" component={UploadYourLogo} />
-          <Route path="/business_hours" component={BusinessHours} />
-          <Route path="/your_services" component={YourServices} />
+          <Route path="/upload_your_logo" component={UploadYourLogo} exact />
+          <Route path="/business_hours" component={BusinessHours} exact />
+          <Route path="/your_services" component={YourServices} exact />
+          <Route path="/staff_management" exact component={StaffManagement} />
+          <Route path="/add_staff_name" component={AddStaffName} exact />
+          <Route path="/opening_hours" component={OpeningHours} exact />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

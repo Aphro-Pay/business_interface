@@ -31,17 +31,8 @@ function App() {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet animated="false">
-          <Route path="/tabs/:id" component={Tabs} exact />
-          <Redirect from="/tabs" to="/tabs/home" exact />
-
-          <Route exact path="/add_booking" component={AddBooking} />
-          <Route
-            exact
-            path="/tabs/transaction_details"
-            component={TransactionDetails}
-          />
-
           <Route path="/splash" component={Splash} exact />
+          <Redirect from="/" to="/splash" exact />
           <Route path="/login" component={LogIn} exact />
           <Route
             path="/enter_mobile_number"
@@ -66,6 +57,16 @@ function App() {
           <Route path="/staff_management" exact component={StaffManagement} />
           <Route path="/add_staff_name" component={AddStaffName} exact />
           <Route path="/opening_hours" component={OpeningHours} exact />
+
+          <Route path="/tabs/:id" component={Tabs} exact />
+          <Redirect from="/tabs" to="/tabs/home" exact />
+
+          <Route exact path="/add_booking" component={AddBooking} />
+          <Route
+            exact
+            path="/tabs/transaction_details"
+            component={TransactionDetails}
+          />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

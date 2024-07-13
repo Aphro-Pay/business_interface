@@ -12,6 +12,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  getMultiFactorResolver,
 } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { useHistory } from "react-router-dom";
@@ -30,13 +31,15 @@ function LogIn() {
   };
 
   async function SignIn() {
+    let resolver;
+    let multiFactorHints;
     //const res = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(auth.currentUser);
+    //await sendEmailVerification(auth.currentUser);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        history.push("/enter_mobile_number");
+        history.push("/tabs/home");
 
         console.log(user);
       })
@@ -44,6 +47,36 @@ function LogIn() {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        if (error.code == "auth/multi-factor-auth-required") {
+          /*
+          resolver = getMultiFactorResolver(auth, error);
+          // Show UI to let user select second factor.
+          multiFactorHints = resolver.hints;
+          const phoneInfoOptions = {
+            multiFactorHint: resolver.hints[selectedIndex],
+            session: resolver.session,
+          };
+          const phoneAuthProvider = new PhoneAuthProvider(auth);
+          // Send SMS verification code
+          return phoneAuthProvider
+            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+            .then(function (verificationId) {
+              // Ask user for the SMS verification code. Then:
+              const cred = PhoneAuthProvider.credential(
+                verificationId,
+                verificationCode
+              );
+              const multiFactorAssertion =
+                PhoneMultiFactorGenerator.assertion(cred);
+              // Complete sign-in.
+              return resolver.resolveSignIn(multiFactorAssertion);
+            })
+            .then(function (userCredential) {
+              // User successfully signed in with the second factor phone number.
+            });*/
+        } else {
+          // Handle other errors.
+        }
       });
   }
 

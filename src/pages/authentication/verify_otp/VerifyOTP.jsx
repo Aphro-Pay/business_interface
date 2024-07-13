@@ -37,20 +37,22 @@ function VerifyOTP() {
   };
 
   const handleVerifyInput = async (event) => {
-    let otpInput = userInput.join();
+    let otpInput = userInput.join("");
 
     console.log(verification);
+    console.log(otpInput);
     try {
       //get the OTP from user nad pass in PhoneAuthProvider
       const cred = PhoneAuthProvider.credential(verification, otpInput);
       const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
 
       const user = auth.currentUser;
+      console.log(user);
       /* Enrolling the user in the multi-factor authentication. */
-      await user.multiFactor
+      await multiFactor(user)
         .enroll(multiFactorAssertion, "phone")
         .then((enrollment) => {
-          console.log("success");
+          history.push("/tabs/home");
         });
       /* Removing the user from localStorage. */
       //localStorage.removeItem("user");
@@ -86,26 +88,30 @@ function VerifyOTP() {
         size: "invisible",
       });
       recaptchaVerifier.render();
-      await multiFactor(user)
-        .getSession()
-        .then(function (multiFactorSession) {
-          // Specify the phone number and pass the MFA session.
-          const phoneInfoOptions = {
-            phoneNumber: `+${phone}`,
-            session: multiFactorSession,
-          };
+      try {
+        await multiFactor(user)
+          .getSession()
+          .then(function (multiFactorSession) {
+            // Specify the phone number and pass the MFA session.
+            const phoneInfoOptions = {
+              phoneNumber: `+${phone}`,
+              session: multiFactorSession,
+            };
 
-          const phoneAuthProvider = new PhoneAuthProvider(auth);
+            const phoneAuthProvider = new PhoneAuthProvider(auth);
 
-          // Send SMS verification code.
-          return phoneAuthProvider.verifyPhoneNumber(
-            phoneInfoOptions,
-            recaptchaVerifier
-          );
-        })
-        .then(function (verificationId) {
-          setverification(verificationId);
-        });
+            // Send SMS verification code.
+            return phoneAuthProvider.verifyPhoneNumber(
+              phoneInfoOptions,
+              recaptchaVerifier
+            );
+          })
+          .then(function (verificationId) {
+            setverification(verificationId);
+          });
+      } catch (err) {
+        recaptchaVerifier.clear();
+      }
     });
   };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { add } from "ionicons/icons";
 import { IonIcon, IonPage } from "@ionic/react";
 import Header from "../../../components/Header";
@@ -8,11 +8,17 @@ import RoundButton from "../../../components/RoundButton";
 import { Route, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { IonRouterOutlet } from "@ionic/react";
 import AddStaffName from "./AddStaffName";
+import { BusinessContext } from "../../../providers/BusinessProvider";
 
 function StaffManagement() {
+  const { business, setBusiness } = useContext(BusinessContext);
   const history = useHistory();
 
+  const staff = business.getInfo().staff;
+  console.log(staff);
+
   const addStaffName = () => history.push("/add_staff_name");
+
   return (
     <IonPage>
       <div className="scaffold">
@@ -20,6 +26,17 @@ function StaffManagement() {
           mainText="Staff management"
           subText="Add the names of the different professionals at your establishment. You can always change these later."
         />
+        {staff.map((name, index) => (
+          <div key={index}>
+            <div className={styles.flexRow}>
+              <div style={{ display: "inline-block" }}>
+                <div className={styles.staffName}>{name}</div>
+              </div>
+              <Space width="100%"></Space>
+            </div>
+            <Space height="25px"></Space>
+          </div>
+        ))}
         <div className={styles.addService}>
           Add Professional <Space width="100%" />
           <IonIcon
@@ -28,6 +45,7 @@ function StaffManagement() {
             onClick={addStaffName}
           ></IonIcon>
         </div>
+        <Space height="25px"></Space>
         <RoundButton
           text="Continue"
           navigateTo="/success/onboarding_complete"
@@ -38,4 +56,4 @@ function StaffManagement() {
   );
 }
 
-export default StaffManagement;
+export default React.memo(StaffManagement);

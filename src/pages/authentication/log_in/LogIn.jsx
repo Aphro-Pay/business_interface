@@ -13,9 +13,11 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getMultiFactorResolver,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { useHistory } from "react-router-dom";
+import Header from "../../../components/Header";
 
 function LogIn() {
   const [email, setEmail] = useState("");
@@ -82,11 +84,10 @@ function LogIn() {
 
   return (
     <IonPage>
-      <div className={styles.scaffold}>
-        <div className={styles.header}>
-          <div className={styles.title}>Log in to your account</div>
-          <FloatingButton icon={closeOutline} vertical="top" horizontal="end" />
-        </div>
+      <div className="scaffold">
+        <Header enableBackButton="n" />
+        <div className={styles.title}>Log in to your account</div>
+        <Space height="50px" />
         <div className={styles.body}>
           <form className={`${styles.column} ${styles.content}`}>
             <Input
@@ -100,7 +101,17 @@ function LogIn() {
               label="Password"
               onChange={handlePasswordChange}
             />
-            <ClickableText text="Forgot Password?" />
+            <ClickableText
+              text="Forgot Password?"
+              onClick={async () => {
+                if (email === "") {
+                  alert("Please enter your email");
+                } else {
+                  await sendPasswordResetEmail(auth, email);
+                  alert("Please check your inbox to reset your password");
+                }
+              }}
+            />
             <Space height="15px" />
             <RoundButton
               text="Log in"
@@ -115,7 +126,9 @@ function LogIn() {
             <ClickableText
               text="Sign Up"
               textDecoration="underline"
-              onClick={() => {}}
+              onClick={() => {
+                history.push("/create_your_login_details");
+              }}
             />
           </div>
         </div>

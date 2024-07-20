@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { IonFab, IonFabButton, IonIcon, IonPage } from "@ionic/react";
 import { checkmarkCircle } from "ionicons/icons";
 import { useParams } from "react-router-dom";
 import Space from "../components/Space";
+import { BusinessContext } from "../providers/BusinessProvider";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Success(prop) {
+  const history = useHistory();
+  const { business, setBusiness } = useContext(BusinessContext);
   const { state } = useParams();
-  console.log(state);
+
+  useEffect(() => {
+    if (state != "done") {
+      console.log(business);
+      setTimeout(null, 10000);
+      business.register();
+    }
+  }, [business]);
+
+  useEffect(() => {
+    localStorage.clear();
+  });
+
   return (
     <IonPage>
       <div
@@ -36,4 +52,4 @@ function Success(prop) {
   );
 }
 
-export default Success;
+export default React.memo(Success);

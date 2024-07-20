@@ -7,6 +7,7 @@ import {
 } from "ionicons/icons";
 import "../App.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { IonItem, IonRouterLink } from "@ionic/react";
 
 function Header(prop) {
   const history = useHistory();
@@ -18,7 +19,7 @@ function Header(prop) {
             icon={arrowBackOutline}
             vertical="top"
             horizontal="start"
-            onClick={history.goBack}
+            onClick={prop.goBack ?? history.goBack}
           />
         )}
         {prop.enableIcon == "y" && (
@@ -37,13 +38,24 @@ function Header(prop) {
   ) : (
     <div>
       <div className="header">
+        {prop.enableBackButton == "n" ? null : (
+          <FloatingButton
+            icon={arrowBackOutline}
+            vertical="top"
+            horizontal="start"
+            onClick={history.goBack}
+          />
+        )}
         <FloatingButton
-          icon={arrowBackOutline}
+          icon={closeOutline}
           vertical="top"
-          horizontal="start"
-          onClick={history.goBack}
+          horizontal="end"
+          onClick={() => {
+            localStorage.clear();
+            history.push("/");
+            window.location.reload();
+          }}
         />
-        <FloatingButton icon={closeOutline} vertical="top" horizontal="end" />
       </div>
       <div>
         <h2>{prop.mainText}</h2>

@@ -21,21 +21,32 @@ import Home from "./home/Home";
 import Bookings from "./bookings/Bookings";
 import Payments from "./payments/Payments";
 import Settings from "./settings/Settings";
+import AddBooking from "./bookings/AddBooking";
+import TransactionDetails from "./payments/TransactionDetails";
 
 function Tabs() {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/tabs" to="/tabs/home" />
-        {/*
-          Use the render method to reduce the number of renders your component will have due to a route change.
+        <Route exact path="/tabs/home">
+          <Home />
+        </Route>
+        <Route exact path="/tabs/bookings">
+          <Bookings />
+        </Route>
+        <Route exact path="/tabs/bookings/add">
+          <AddBooking />
+        </Route>
+        <Route exact path="/tabs/payments">
+          <Payments />
+        </Route>
+        <Route exact path="/tabs/payments/transaction_details">
+          <TransactionDetails />
+        </Route>
 
-          Use the component prop when your component depends on the RouterComponentProps passed in automatically.
-        */}
-        <Route path="/tabs/home" render={() => <Home />} exact={true} />
-        <Route path="/tabs/bookings" render={() => <Bookings />} exact={true} />
-        <Route path="/tabs/payments" render={() => <Payments />} exact={true} />
-        <Route path="/tabs/settings" render={() => <Settings />} exact={true} />
+        <Route exact path="/tabs/settings">
+          <Settings />
+        </Route>
         <Route exact path="/tabs">
           <Redirect to="/tabs/home" />
         </Route>
@@ -65,4 +76,4 @@ function Tabs() {
     </IonTabs>
   );
 }
-export default Tabs;
+export default React.memo(Tabs);

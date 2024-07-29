@@ -1,9 +1,10 @@
 import "./App.css";
 import "@ionic/react/css/core.css";
+import React, { useContext } from "react";
 
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import Splash from "./pages/Splash";
 import LogIn from "./pages/authentication/log_in/LogIn";
 import VerifyOTP from "./pages/authentication/verify_otp/VerifyOTP";
@@ -23,54 +24,97 @@ import AddBooking from "./pages/tabs/bookings/AddBooking";
 import TransactionDetails from "./pages/tabs/payments/TransactionDetails";
 
 import { setupIonicReact } from "@ionic/react";
+import { useState } from "react";
+import Business from "./models/Business";
+import AddServices from "./pages/onboarding/your_services/AddServices";
+import { AuthContext } from "./providers/AuthProvider";
+import PrivateRoute from "./routes/Private";
+import PublicRoute from "./routes/Public";
 
 setupIonicReact();
 
 function App() {
+  const [newBusiness, setNewBusiness] = useState(new Business());
+  const { loding, user } = useContext(AuthContext);
+
   return (
     <IonApp>
       <IonReactRouter>
-        <IonRouterOutlet animated="false">
-          <Route path="/splash" component={Splash} exact />
-          <Redirect from="/" to="/splash" exact />
-          <Route path="/login" component={LogIn} exact />
-          <Route
-            path="/enter_mobile_number"
-            component={EnterMobileNumber}
-            exact
-          />
-          <Route path="/verify_otp" component={VerifyOTP} exact />
-          <Route path="/success/:state" component={Success} exact />
-          <Route
-            path="/create_your_login_details"
-            component={CreateYourLoginDetails}
-            exact
-          />
-          <Route
-            path="/set_up_your_business_profile"
-            component={SetUpYourBusinessProfile}
-            exact
-          />
-          <Route path="/upload_your_logo" component={UploadYourLogo} exact />
-          <Route path="/business_hours" component={BusinessHours} exact />
-          <Route path="/your_services" component={YourServices} exact />
-          <Route path="/staff_management" exact component={StaffManagement} />
-          <Route path="/add_staff_name" component={AddStaffName} exact />
-          <Route path="/opening_hours" component={OpeningHours} exact />
+        <Route path="/*" exact={true}>
+          <PublicRoute>
+            <IonRouterOutlet>
+              <Route path="/splash" exact={true}>
+                <Splash />
+              </Route>
+              {/*<Redirect from="/" to="/splash" exact />*/}
+              <Route path="/login" exact={true}>
+                <LogIn />
+              </Route>
+              <Route path="/enter_mobile_number" exact={true}>
+                <EnterMobileNumber />
+              </Route>
+              <Route path="/verify_otp" exact={true}>
+                <VerifyOTP />
+              </Route>
+              <Route path="/success/:state" exact={true}>
+                <Success />
+              </Route>
+              <Route path="/create_your_login_details" exact={true}>
+                <CreateYourLoginDetails />
+              </Route>
+            </IonRouterOutlet>
+          </PublicRoute>
+        </Route>
 
-          <Route path="/tabs/:id" component={Tabs} exact />
-          <Redirect from="/tabs" to="/tabs/home" exact />
+        <Route path="/set_up_your_business_profile" exact={true}>
+          <SetUpYourBusinessProfile />
+        </Route>
+        <Route path="/upload_your_logo" exact={true}>
+          <UploadYourLogo />
+        </Route>
 
-          <Route exact path="/add_booking" component={AddBooking} />
-          <Route
-            exact
-            path="/tabs/transaction_details"
-            component={TransactionDetails}
-          />
-        </IonRouterOutlet>
+        <Route
+          path="/business_hours"
+          component={BusinessHours}
+          exact={true}
+        ></Route>
+
+        <Route
+          path="/your_services"
+          component={YourServices}
+          exact={true}
+        ></Route>
+
+        <Route path="/add_service" exact={true}>
+          <AddServices />
+        </Route>
+
+        <Route
+          path="/staff_management"
+          component={StaffManagement}
+          exact={true}
+        ></Route>
+
+        <Route path="/add_staff_name" exact={true}>
+          <AddStaffName />
+        </Route>
+
+        <Route path="/opening_hours/:state" exact={true}>
+          <OpeningHours />
+        </Route>
+
+        <Route path="/" exact={true}>
+          <PrivateRoute>
+            <IonReactRouter>
+              <Route path="/tabs/:id">
+                <Tabs />
+              </Route>
+              <Redirect from="/tabs" to="/tabs/home" exact={true} />
+            </IonReactRouter>
+          </PrivateRoute>
+        </Route>
       </IonReactRouter>
     </IonApp>
-
     /* <div className="App">
       
       <Success />
@@ -86,4 +130,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);

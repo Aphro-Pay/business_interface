@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { add } from "ionicons/icons";
 import { IonIcon, IonPage } from "@ionic/react";
 import Header from "../../../components/Header";
 import styles from "./YourServices.module.css";
 import Space from "../../../components/Space";
 import RoundButton from "../../../components/RoundButton";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { BusinessContext } from "../../../providers/BusinessProvider";
+import { Business, getInfo } from "../../../models/Business";
 
 function YourServices() {
+  const { business, setBusiness } = useContext(BusinessContext);
+  const history = useHistory();
+  const addService = () => history.push("/add_service");
+
   const dataToPass = {
     mainText: "Onboarding complete!",
   };
+
+  const services = business.getInfo().services;
+  console.log(services);
+
   return (
     <IonPage>
       <div className="scaffold">
@@ -17,22 +28,40 @@ function YourServices() {
           mainText="Your Services"
           subText="Include the price list for your treatments below. You can always change this later."
         />
-        <div className={styles.addService}>
-          Add Service <Space width="100%" />
-          <IonIcon
-            icon={add}
-            style={{ fontSize: "30px", color: "#879194" }}
-          ></IonIcon>
+        <div>
+          {services.map(({ service, price, notes }, index) => (
+            <div className={styles.flexColumn} key={index}>
+              <div className={styles.flexRow}>
+                <div style={{ display: "inline-block" }}>
+                  <div className={styles.day}>{service}</div>
+                  <div className={styles.time}>{notes}</div>
+                </div>
+                <Space width="100%"></Space>
+                <div>{price}</div>
+              </div>{" "}
+              <Space height="25px"></Space>
+            </div>
+          ))}
+
+          <div className={styles.addService}>
+            Add Service <Space width="100%" />
+            <IonIcon
+              icon={add}
+              style={{ fontSize: "30px", color: "#879194" }}
+              onClick={addService}
+            ></IonIcon>
+          </div>
+          <Space height="25px"></Space>
+          <RoundButton
+            text="Continue"
+            navigateTo="/staff_management"
+            //navigateTo="/success/onboarding_complete"
+            dataToPass={dataToPass}
+          />
         </div>
-        <RoundButton
-          text="Continue"
-          navigateTo="/staff_management"
-          //navigateTo="/success/onboarding_complete"
-          dataToPass={dataToPass}
-        />
       </div>
     </IonPage>
   );
 }
 
-export default YourServices;
+export default React.memo(YourServices);

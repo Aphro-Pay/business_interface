@@ -7,7 +7,7 @@ import { IonPage } from "@ionic/react";
 function Splash() {
   return (
     <IonPage>
-      <div className={styles.scaffold}>
+      <div className="scaffold">
         <div className={styles.body}>
           <div className={styles.content}>
             <img

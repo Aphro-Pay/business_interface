@@ -8,16 +8,18 @@ import {
 } from "firebase/storage";
 
 class Service {
-  constructor(service, price, notes) {
+  constructor(service, price, duration, notes) {
     this.service = service;
     this.price = price;
     this.notes = notes;
+    this.duration = duration;
   }
 
   toMap() {
     return {
       service: this.service,
       price: this.price,
+      duration: this.duration,
       notes: this.notes,
     };
   }

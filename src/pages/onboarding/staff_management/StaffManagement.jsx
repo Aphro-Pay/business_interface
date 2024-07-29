@@ -9,6 +9,7 @@ import { Route, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { IonRouterOutlet } from "@ionic/react";
 import AddStaffName from "./AddStaffName";
 import { BusinessContext } from "../../../providers/BusinessProvider";
+import { closeOutline } from "ionicons/icons";
 
 function StaffManagement() {
   const { business, setBusiness } = useContext(BusinessContext);
@@ -32,8 +33,16 @@ function StaffManagement() {
               <div style={{ display: "inline-block" }}>
                 <div className={styles.staffName}>{name}</div>
               </div>
-              <Space width="100%"></Space>
+              <Space flexGrow="1"></Space>
+              <IonIcon
+                icon={closeOutline}
+                onClick={() => {
+                  staff.splice(index, 1);
+                  setBusiness(business.clone());
+                }}
+              ></IonIcon>
             </div>
+
             <Space height="25px"></Space>
           </div>
         ))}

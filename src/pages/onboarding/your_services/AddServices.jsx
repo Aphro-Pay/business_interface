@@ -15,8 +15,11 @@ function AddServices() {
     if (validateInput()) {
       let service = document.getElementById("service").value;
       let price = document.getElementById("price").value;
+      let duration = document.getElementById("duration").value;
+      const [hours, minutes] = duration.split(":");
+      duration = { hours: hours, minutes: minutes };
       let notes = document.getElementById("notes").value;
-      let newService = new Service(service, price, notes);
+      let newService = new Service(service, price, duration, notes);
       business.addService(newService);
       setBusiness(business.clone());
       history.goBack();
@@ -25,9 +28,23 @@ function AddServices() {
 
   function validateInput() {
     let service = document.getElementById("service").value;
+    let duration = document.getElementById("duration").value;
+    let price = document.getElementById("price").value;
 
     if (service === "") {
-      alert("Please enter a valid input");
+      alert("Please enter a valid service");
+      return false;
+    }
+
+    if (price === "") {
+      alert("Please enter a valid price");
+      return false;
+    }
+
+    var pattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+
+    if (!pattern.test(duration)) {
+      alert("Please enter a valid duration");
       return false;
     }
 
@@ -39,7 +56,14 @@ function AddServices() {
       <div className="scaffold">
         <Header mainText="Add Service" />
         <Input hintText="Manicure" label="Service" id="service" />
-        <Input hintText="N11,000" label="Price" id="price" />
+        <Input
+          hintText="11,000"
+          label="Price"
+          id="price"
+          prefix="&#8358;"
+          type="number"
+        />
+        <Input hintText="HH:MM" label="Duration" id="duration" />
         <Input hintText="Acrylic" label="Notes" id="notes" />
         <RoundButton text="Save" onClick={handleOnClickSave} />
       </div>

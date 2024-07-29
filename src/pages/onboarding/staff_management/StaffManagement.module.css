@@ -10,3 +10,9 @@
 .staffName {
   font-weight: 500;
 }
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}

@@ -46,6 +46,7 @@ function Input(prop) {
       >
         {prop.icon != null ? <IonIcon icon={prop.icon}></IonIcon> : null}
         <Space width="5px" />
+        {prop.prefix != null ? <span>{prop.prefix}</span> : null}
         <input
           type={prop.id === "passwordInput" ? inputType : prop.type ?? "text"}
           placeholder={prop.hintText}

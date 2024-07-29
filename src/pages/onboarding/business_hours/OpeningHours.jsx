@@ -49,7 +49,7 @@ function OpeningHours(prop) {
     let open = document.getElementById("open").value;
     let close = document.getElementById("close").value;
 
-    var pattern = /^([0-9]|[0-1][0-9]|2[0-3]):[0-5][0-9][a p A P][M m]/;
+    var pattern = /^([0-9]|[0-1][0-9]|2[0-3]):[0-5][0-9][a p A P][M m]$/;
 
     if (!pattern.test(open)) {
       alert("Please enter a valid time format for opening hours");

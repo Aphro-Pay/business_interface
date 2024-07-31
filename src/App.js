@@ -30,6 +30,7 @@ import AddServices from "./pages/onboarding/your_services/AddServices";
 import { AuthContext } from "./providers/AuthProvider";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
+import AddStaffPrice from "./pages/onboarding/your_services/AddStaffPrice";
 
 setupIonicReact();
 
@@ -97,6 +98,10 @@ function App() {
 
         <Route path="/add_staff_name" exact={true}>
           <AddStaffName />
+        </Route>
+
+        <Route path="/add_staff_price" exact={true}>
+          <AddStaffPrice />
         </Route>
 
         <Route path="/opening_hours/:state" exact={true}>

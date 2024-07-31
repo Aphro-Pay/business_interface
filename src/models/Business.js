@@ -7,10 +7,24 @@ import {
   uploadBytes,
 } from "firebase/storage";
 
-class Service {
-  constructor(service, price, duration, notes) {
-    this.service = service;
+class Staff {
+  constructor(staff, price) {
+    this.staff = staff;
     this.price = price;
+  }
+
+  toMap() {
+    return {
+      staff: this.staff,
+      price: this.price,
+    };
+  }
+}
+
+class Service {
+  constructor(service, staff, duration, notes) {
+    this.service = service;
+    this.staff = [];
     this.notes = notes;
     this.duration = duration;
   }
@@ -137,4 +151,4 @@ class Business {
 
 export default Business;
 
-export { Service };
+export { Service, Staff };

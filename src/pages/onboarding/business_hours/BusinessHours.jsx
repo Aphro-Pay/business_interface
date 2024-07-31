@@ -58,7 +58,7 @@ function BusinessHours() {
             ></IonIcon>
           </div>
         ))}
-        <RoundButton text="Continue" navigateTo="/your_services" />
+        <RoundButton text="Continue" navigateTo="/staff_management" />
       </div>
     </IonPage>
   );

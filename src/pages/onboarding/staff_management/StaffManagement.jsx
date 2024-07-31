@@ -57,7 +57,7 @@ function StaffManagement() {
         <Space height="25px"></Space>
         <RoundButton
           text="Continue"
-          navigateTo="/success/onboarding_complete"
+          navigateTo="/your_services"
           //dataToPass={dataToPass}
         />
       </div>

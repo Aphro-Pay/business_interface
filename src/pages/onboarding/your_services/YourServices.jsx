@@ -68,7 +68,7 @@ function YourServices() {
           <Space height="25px"></Space>
           <RoundButton
             text="Continue"
-            navigateTo="/staff_management"
+            navigateTo="/success/onboarding_complete"
             //navigateTo="/success/onboarding_complete"
             dataToPass={dataToPass}
           />

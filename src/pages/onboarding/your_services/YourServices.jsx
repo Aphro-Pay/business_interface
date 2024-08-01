@@ -31,7 +31,7 @@ function YourServices() {
           subText="Include the price list for your treatments below. You can always change this later."
         />
         <div>
-          {services.map(({ service, price, duration, notes }, index) => (
+          {services.map(({ service, duration }, index) => (
             <div className={styles.flexColumn} key={index}>
               <div className={styles.flexRow}>
                 <div style={{ display: "inline-block" }}>
@@ -50,7 +50,6 @@ function YourServices() {
                       setBusiness(business.clone());
                     }}
                   ></IonIcon>
-                  <div>&#8358;{price}</div>
                 </div>
               </div>{" "}
               <Space height="25px"></Space>
@@ -68,7 +67,7 @@ function YourServices() {
           <Space height="25px"></Space>
           <RoundButton
             text="Continue"
-            navigateTo="/staff_management"
+            navigateTo="/success/onboarding_complete"
             //navigateTo="/success/onboarding_complete"
             dataToPass={dataToPass}
           />

@@ -25,7 +25,7 @@ import TransactionDetails from "./pages/tabs/payments/TransactionDetails";
 
 import { setupIonicReact } from "@ionic/react";
 import { useState } from "react";
-import Business from "./models/Business";
+import Business, { Staff } from "./models/Business";
 import AddServices from "./pages/onboarding/your_services/AddServices";
 import { AuthContext } from "./providers/AuthProvider";
 import PrivateRoute from "./routes/Private";
@@ -37,6 +37,13 @@ setupIonicReact();
 function App() {
   const [newBusiness, setNewBusiness] = useState(new Business());
   const { loding, user } = useContext(AuthContext);
+  const [staff, setStaff] = useState([]);
+
+  const addStaffPrice = (staffName, staffPrice) => {
+    console.log("hello");
+    setStaff(staff.concat([new Staff(staffName, staffPrice).toMap()]));
+    console.log(staff);
+  };
 
   return (
     <IonApp>
@@ -87,7 +94,7 @@ function App() {
         ></Route>
 
         <Route path="/add_service" exact={true}>
-          <AddServices />
+          <AddServices setStaff={setStaff} staff={staff} />
         </Route>
 
         <Route
@@ -101,7 +108,7 @@ function App() {
         </Route>
 
         <Route path="/add_staff_price" exact={true}>
-          <AddStaffPrice />
+          <AddStaffPrice addStaffPrice={addStaffPrice} />
         </Route>
 
         <Route path="/opening_hours/:state" exact={true}>

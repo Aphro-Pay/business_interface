@@ -1,4 +1,4 @@
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { auth, db, storage } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
@@ -145,7 +145,7 @@ class Business {
       }
     }
 
-    const docRef = addDoc(collection(db, "businesses"), this.getInfo());
+    await setDoc(doc(db, "businesses", this.id), this.getInfo());
   }
 }
 

@@ -15,6 +15,7 @@ function Splash() {
               alt="logo"
               width="80%"
             />
+            <Space height="16px" />
             <RoundButton text="Log in" navigateTo="/login" />
             <Space height="16px" />
             <RoundButton

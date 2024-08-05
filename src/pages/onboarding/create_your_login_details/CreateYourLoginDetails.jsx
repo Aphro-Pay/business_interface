@@ -106,6 +106,7 @@ function CreateYourLoginDetails() {
           onChange={handlePasswordChange}
           defaultValue={localStorage.getItem("password")}
         />
+        <Space height="20px" />
         <div>
           Your password must include: <br />
           &#10003; 8-32 characters long <br />

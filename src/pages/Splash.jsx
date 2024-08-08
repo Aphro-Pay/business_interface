@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import RoundButton from "../components/RoundButton";
 import Space from "../components/Space";
 import styles from "./Splash.module.css";

@@ -7,27 +7,23 @@ import {
 } from "@ionic/react";
 import React from "react";
 import Header from "../../../components/Header";
-import styles from "./Payments.module.css";
-import Space from "../../../components/Space";
-import RoundButton from "../../../components/RoundButton";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import ComingSoon from "../../../components/ComingSoon";
 
 function Payments() {
-  const history = useHistory();
-  const handleDetailsOnClick = () => {
-    history.push("/tabs/payments/transaction_details");
-  };
+  //const history = useHistory();
+  // const handleDetailsOnClick = () => {
+  //   history.push("/tabs/payments/transaction_details");
+  //};
 
-  const daysOfTheWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  // const daysOfTheWeek = [
+  //   "Monday",
+  //   "Tuesday",
+  //   "Wednesday",
+  //   "Thursday",
+  //   "Friday",
+  //   "Saturday",
+  //   "Sunday",
+  // ];
   return (
     <IonPage>
       <IonContent>

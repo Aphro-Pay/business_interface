@@ -5,14 +5,9 @@ import RoundButton from "../../../components/RoundButton";
 import Input from "../../../components/Input";
 import ClickableText from "../../../components/ClickableText";
 import Space from "../../../components/Space";
-import FloatingButton from "../../../components/FloatingButton";
-import { closeOutline } from "ionicons/icons";
 import { IonPage } from "@ionic/react";
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  getMultiFactorResolver,
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../../../firebase";
@@ -33,8 +28,8 @@ function LogIn() {
   };
 
   async function SignIn() {
-    let resolver;
-    let multiFactorHints;
+    //let resolver;
+    //let multiFactorHints;
     //const res = await createUserWithEmailAndPassword(auth, email, password);
     //await sendEmailVerification(auth.currentUser);
     signInWithEmailAndPassword(auth, email, password)
@@ -49,7 +44,7 @@ function LogIn() {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        if (error.code == "auth/multi-factor-auth-required") {
+        if (error.code === "auth/multi-factor-auth-required") {
           /*
           resolver = getMultiFactorResolver(auth, error);
           // Show UI to let user select second factor.

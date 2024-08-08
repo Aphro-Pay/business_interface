@@ -1,12 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
-import EnterMobileNumber from "../enter_mobile_number/EnterMobileNumber";
-import FloatingButton from "../../../components/FloatingButton";
-import Input from "../../../components/Input";
-import {
-  closeOutline,
-  arrowBackOutline,
-  phonePortraitOutline,
-} from "ionicons/icons";
+import React, { useState, useEffect } from "react";
 import RoundButton from "../../../components/RoundButton";
 import OTPInput from "../../../components/OTPInput";
 import Space from "../../../components/Space";
@@ -23,16 +15,15 @@ import {
 
 import Header from "../../../components/Header";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import Success from "../../Success";
 
 function VerifyOTP() {
   const history = useHistory();
   const [userInput, setUserInput] = useState(["0", "0", "0", "0", "0", "0"]);
-  const [verification, setverification] = useState("");
+  const [verification, setVerification] = useState("");
 
   const handleInputChange = (event) => {
     let index = event.target.id;
-    userInput[index] = event.target.value == "" ? "0" : event.target.value;
+    userInput[index] = event.target.value === "" ? "0" : event.target.value;
     setUserInput(userInput);
   };
 
@@ -62,9 +53,9 @@ function VerifyOTP() {
     }
   };
 
-  const dataToPass = {
-    mainText: "Done",
-  };
+  //const dataToPass = {
+  //  mainText: "Done",
+  //};
   useEffect(() => {
     //get the user data from localStorage
     const getdata = JSON.parse(window.localStorage.getItem("user"));
@@ -74,7 +65,7 @@ function VerifyOTP() {
     }
     sentotp(getdata);
     //set user in state
-  }, []);
+  }, [history]);
 
   const sentotp = async (getdata) => {
     /* A listener that triggers whenever the authentication state changes. */
@@ -107,7 +98,7 @@ function VerifyOTP() {
             );
           })
           .then(function (verificationId) {
-            setverification(verificationId);
+            setVerification(verificationId);
           });
       } catch (err) {
         recaptchaVerifier.clear();

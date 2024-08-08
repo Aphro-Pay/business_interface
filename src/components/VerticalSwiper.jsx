@@ -4,20 +4,19 @@ import { register } from "swiper/element/bundle";
 register();
 
 function VerticalSwiper() {
-  /*
   const swiperElRef = useRef(null);
 
   useEffect(() => {
     // listen for Swiper events using addEventListener
     swiperElRef.current.addEventListener("swiperprogress", (e) => {
-      const [swiper, progress] = e.detail;
+      const [progress] = e.detail;
       console.log(progress);
     });
 
     swiperElRef.current.addEventListener("swiperslidechange", (e) => {
       console.log("slide changed");
     });
-  }, []);*/
+  }, []);
 
   return (
     <swiper-container

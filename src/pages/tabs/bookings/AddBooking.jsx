@@ -1,8 +1,6 @@
-import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React from "react";
 import Header from "../../../components/Header";
-import Input from "../../../components/Input";
-import RoundButton from "../../../components/RoundButton";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import ComingSoon from "../../../components/ComingSoon";
 

@@ -31,7 +31,7 @@ function CreateYourLoginDetails() {
       return false;
     }
 
-    if (password == null || password != confirmedPassword) {
+    if (password === null || password !== confirmedPassword) {
       alert("Please reconfirm your password");
       return false;
     }

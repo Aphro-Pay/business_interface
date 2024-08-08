@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 import "../App.css";
@@ -6,10 +6,8 @@ import Space from "./Space";
 
 function Input(prop) {
   const [inputType, setInputType] = useState("password");
-  const [icon, setIcon] = useState("password");
 
   function toggleVisibilty() {
-    let i = document.getElementById("passwordInput");
     if (inputType === "password") {
       setInputType("text");
     } else {
@@ -18,7 +16,7 @@ function Input(prop) {
   }
 
   let suffixIcon =
-    inputType == "text" ? (
+    inputType === "text" ? (
       <IonIcon
         icon={eyeOffOutline}
         onClick={toggleVisibilty}

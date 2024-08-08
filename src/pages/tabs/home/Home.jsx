@@ -2,8 +2,6 @@ import { IonPage, IonIcon, IonContent } from "@ionic/react";
 import React from "react";
 import Header from "../../../components/Header";
 import moment from "moment";
-import VerticalSwiper from "../../../components/VerticalSwiper";
-import BarChart from "../../../components/BarChart";
 import { calendarNumberOutline } from "ionicons/icons";
 import Space from "../../../components/Space";
 import ComingSoon from "../../../components/ComingSoon";

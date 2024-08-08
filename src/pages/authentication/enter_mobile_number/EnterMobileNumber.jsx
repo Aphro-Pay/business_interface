@@ -1,21 +1,10 @@
 import React, { useState } from "react";
 import styles from "./EnterMobileNumber.module.css";
-import FloatingButton from "../../../components/FloatingButton";
 import Input from "../../../components/Input";
-import {
-  closeOutline,
-  arrowBackOutline,
-  phonePortraitOutline,
-} from "ionicons/icons";
+import { phonePortraitOutline } from "ionicons/icons";
 import RoundButton from "../../../components/RoundButton";
 import { IonPage } from "@ionic/react";
 import Header from "../../../components/Header";
-import {
-  multiFactor,
-  PhoneAuthProvider,
-  PhoneMultiFactorGenerator,
-  RecaptchaVerifier,
-} from "firebase/auth";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function EnterMobileNumber() {

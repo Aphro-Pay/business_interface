@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { IonFab, IonFabButton, IonIcon, IonPage } from "@ionic/react";
+import React, { useContext, useEffect, useState } from "react";
+import { IonIcon, IonPage } from "@ionic/react";
 import { checkmarkCircle } from "ionicons/icons";
 import { useParams } from "react-router-dom";
 import Space from "../components/Space";
@@ -7,21 +7,30 @@ import { BusinessContext } from "../providers/BusinessProvider";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Success(prop) {
+  const { business } = useContext(BusinessContext);
   const history = useHistory();
-  const { business, setBusiness } = useContext(BusinessContext);
-  const { state } = useParams();
+
+  const { param } = useParams();
+  const [state, setState] = useState(param);
 
   useEffect(() => {
-    if (state != "done") {
-      console.log(business);
-      setTimeout(null, 10000);
-      business.register();
+    async function updateState() {
+      if (state !== "done") {
+        let isError = await business.register();
+        if (isError) {
+          setState(isError);
+        } else {
+          setState("done");
+        }
+      }
     }
-  }, [business]);
+    setTimeout(updateState, 3500);
+  }, [business, state]);
 
-  useEffect(() => {
-    localStorage.clear();
-  });
+  window.onpopstate = () => {
+    console.log("here");
+    history.go("/");
+  };
 
   return (
     <IonPage>
@@ -40,11 +49,19 @@ function Success(prop) {
           style={{ fontSize: "60px", color: "#004096" }}
         ></IonIcon>
         <Space height="5px" />
-        <div>{state == "done" ? "Done" : "Onboarding Complete"}</div>
+        <div>
+          {state === "done"
+            ? "Done"
+            : state?.includes("Error")
+            ? state?.substring(10)
+            : "Onboarding Complete"}
+        </div>
         <Space height="10px"></Space>
         <div>
-          {state == "done"
+          {state === "done"
             ? ""
+            : state?.includes("Error")
+            ? "Please try again or report to hello@aphropay.com. "
             : "You will be redirected to your Home Screen shortly"}
         </div>
       </div>

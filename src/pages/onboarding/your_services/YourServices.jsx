@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { add } from "ionicons/icons";
+import React, { useContext, useEffect } from "react";
 import { IonIcon, IonPage } from "@ionic/react";
 import Header from "../../../components/Header";
 import styles from "./YourServices.module.css";
@@ -7,21 +6,41 @@ import Space from "../../../components/Space";
 import RoundButton from "../../../components/RoundButton";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { BusinessContext } from "../../../providers/BusinessProvider";
-import { Business, getInfo } from "../../../models/Business";
-import { duration } from "moment";
-import { closeOutline } from "ionicons/icons";
+import { add, closeOutline } from "ionicons/icons";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 function YourServices() {
   const { business, setBusiness } = useContext(BusinessContext);
+  const { user } = useContext(AuthContext);
   const history = useHistory();
-  const addService = () => history.push("/add_service");
+  const addService = () => {
+    user ? history.replace("/tabs/add_service") : history.push("/add_service");
+  };
 
   const dataToPass = {
     mainText: "Onboarding complete!",
   };
 
   const services = business.getInfo().services;
-  console.log(services);
+
+  useEffect(() => {
+    if (user) {
+      async function updateDB() {
+        try {
+          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+          await updateDoc(docRef, {
+            services: services,
+          });
+        } catch (error) {
+          console.error("Error updating services: ", error);
+          alert("Failed to update services.");
+        }
+      }
+      updateDB();
+    }
+  }, [services, user]);
 
   return (
     <IonPage>
@@ -29,6 +48,15 @@ function YourServices() {
         <Header
           mainText="Your Services"
           subText="Include the price list for your treatments below. You can always change this later."
+          type={user ? "tabView" : null}
+          enableBackButton={user ? "y" : null}
+          goBack={
+            user
+              ? () => {
+                  history.replace("/tabs/settings");
+                }
+              : null
+          }
         />
         <div>
           {services.map(({ service, duration }, index) => (
@@ -45,9 +73,20 @@ function YourServices() {
                 <div style={{ textAlign: "right" }}>
                   <IonIcon
                     icon={closeOutline}
-                    onClick={() => {
+                    onClick={async () => {
                       services.splice(index, 1);
                       setBusiness(business.clone());
+                      if (user) {
+                        try {
+                          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+                          await updateDoc(docRef, {
+                            services: services,
+                          });
+                        } catch (error) {
+                          console.error("Error updating services: ", error);
+                          alert("Failed to update services.");
+                        }
+                      }
                     }}
                   ></IonIcon>
                 </div>
@@ -67,9 +106,12 @@ function YourServices() {
           <Space height="25px"></Space>
           <RoundButton
             text="Continue"
-            navigateTo="/success/onboarding_complete"
-            //navigateTo="/success/onboarding_complete"
             dataToPass={dataToPass}
+            onClick={() => {
+              user
+                ? history.replace("/tabs/settings")
+                : history.push("/success/onboarding_complete");
+            }}
           />
         </div>
       </div>

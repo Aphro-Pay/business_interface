@@ -14,14 +14,11 @@ function CreateYourLoginDetails() {
   const [confirmedPassword, setConfirmedPassword] = useState();
 
   function handleOnClickContinue(event) {
-    console.log(password);
-    console.log(confirmedPassword);
     let email = document.getElementById("email").value;
     if (validateInput()) {
       localStorage.setItem("password", password);
       business.updateEmail(email);
       setBusiness(business.clone());
-      console.log(business);
       history.push("/set_up_your_business_profile");
     }
   }
@@ -93,7 +90,7 @@ function CreateYourLoginDetails() {
         <Input
           hintText="7gy7y"
           label="Set password"
-          id="passwordInput"
+          id="password"
           name="password"
           onChange={handlePasswordChange}
           defaultValue={localStorage.getItem("password")}
@@ -102,7 +99,7 @@ function CreateYourLoginDetails() {
           hintText="&bull; &bull; &bull; &bull; &bull;"
           label="Confirm password"
           name="confirmedPassword"
-          id="passwordInput"
+          id="confirmedPassword"
           onChange={handlePasswordChange}
           defaultValue={localStorage.getItem("password")}
         />

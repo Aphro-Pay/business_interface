@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import Business from "../models/Business";
-import { business } from "ionicons/icons";
 
 function getInitialState() {
   const business = localStorage.getItem("business");
@@ -13,8 +12,8 @@ const BusinessProvider = ({ children }) => {
   useEffect(() => {
     console.log(business);
     localStorage.setItem("business", JSON.stringify(business));
-    console.log("Here");
   }, [business]);
+
   return (
     <BusinessContext.Provider value={{ business, setBusiness }}>
       {children}

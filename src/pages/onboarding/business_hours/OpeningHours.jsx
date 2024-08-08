@@ -1,9 +1,8 @@
 import { IonPage } from "@ionic/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../../../components/Input";
 import {
   useHistory,
-  useLocation,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
 import Header from "../../../components/Header";
@@ -11,9 +10,13 @@ import RoundButton from "../../../components/RoundButton";
 import { BusinessContext } from "../../../providers/BusinessProvider";
 import { IonReactRouter } from "@ionic/react-router";
 import Space from "../../../components/Space";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 function OpeningHours(prop) {
   const { business, setBusiness } = useContext(BusinessContext);
+  const { user } = useContext(AuthContext);
   const history = useHistory();
   const { state } = useParams();
 
@@ -23,9 +26,7 @@ function OpeningHours(prop) {
     businessHours[state].Status
   );
 
-  console.log(selectedStatus);
-
-  function handleOnClickSave(e) {
+  async function handleOnClickSave(e) {
     let open = null;
     let close = null;
 
@@ -41,7 +42,28 @@ function OpeningHours(prop) {
         close: close,
       });
       setBusiness(business.clone());
-      history.goBack();
+
+      if (user) {
+        try {
+          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+          await updateDoc(docRef, {
+            businessHours: {
+              ...business.businessHours,
+              [state]: {
+                Status: selectedStatus,
+                Open: open,
+                Close: close,
+              },
+            },
+          });
+          history.replace("/tabs/business_hours");
+        } catch (error) {
+          console.error("Error updating hour: ", error);
+          alert("Failed to update business hours.");
+        }
+      } else {
+        history.goBack();
+      }
     }
   }
 
@@ -63,7 +85,6 @@ function OpeningHours(prop) {
 
     return true;
   }
-  useEffect(() => {}, [document.getElementById("status")?.value]);
 
   function handleStatusChange(e) {
     setSelectedStatus(e.target.value);
@@ -73,7 +94,18 @@ function OpeningHours(prop) {
     <IonReactRouter>
       <IonPage>
         <div className="scaffold">
-          <Header mainText="Opening Hours" />
+          <Header
+            mainText="Opening Hours"
+            type={user ? "tabView" : null}
+            enableBackButton={user ? "y" : null}
+            goBack={
+              user
+                ? () => {
+                    history.replace("/tabs/business_hours");
+                  }
+                : null
+            }
+          />
           <Input
             hintText={state}
             label="Day"
@@ -100,7 +132,6 @@ function OpeningHours(prop) {
               flexDirection: "row",
               alignItems: "end",
               backgroundColor: "#e5edf5",
-              fontSize: "14px",
             }}
           >
             <option value="Open">Open</option>

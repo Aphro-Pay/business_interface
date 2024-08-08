@@ -1,24 +1,45 @@
-import React, { useContext } from "react";
-import { add } from "ionicons/icons";
-import { IonIcon, IonPage } from "@ionic/react";
+import React, { useContext, useEffect } from "react";
+import { IonPage, IonIcon } from "@ionic/react";
 import Header from "../../../components/Header";
 import styles from "./StaffManagement.module.css";
 import Space from "../../../components/Space";
 import RoundButton from "../../../components/RoundButton";
-import { Route, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { IonRouterOutlet } from "@ionic/react";
-import AddStaffName from "./AddStaffName";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { BusinessContext } from "../../../providers/BusinessProvider";
-import { closeOutline } from "ionicons/icons";
+import { closeOutline, add } from "ionicons/icons";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 
 function StaffManagement() {
   const { business, setBusiness } = useContext(BusinessContext);
+  const { user } = useContext(AuthContext);
   const history = useHistory();
 
   const staff = business.getInfo().staff;
-  console.log(staff);
 
-  const addStaffName = () => history.push("/add_staff_name");
+  const addStaffName = () => {
+    user
+      ? history.replace("/tabs/add_staff_name")
+      : history.push("/add_staff_name");
+  };
+
+  useEffect(() => {
+    if (user) {
+      async function updateDB() {
+        try {
+          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+          await updateDoc(docRef, {
+            staff: staff,
+          });
+        } catch (error) {
+          console.error("Error updating staff: ", error);
+          alert("Failed to update staff.");
+        }
+      }
+      updateDB();
+    }
+  }, [staff, user]);
 
   return (
     <IonPage>
@@ -26,6 +47,15 @@ function StaffManagement() {
         <Header
           mainText="Staff management"
           subText="Add the names of the different professionals at your establishment. You can always change these later."
+          type={user ? "tabView" : null}
+          enableBackButton={user ? "y" : null}
+          goBack={
+            user
+              ? () => {
+                  history.replace("/tabs/settings");
+                }
+              : null
+          }
         />
         {staff.map((name, index) => (
           <div key={index}>
@@ -36,9 +66,21 @@ function StaffManagement() {
               <Space flexGrow="1"></Space>
               <IonIcon
                 icon={closeOutline}
-                onClick={() => {
+                onClick={async () => {
                   staff.splice(index, 1);
                   setBusiness(business.clone());
+
+                  if (user) {
+                    try {
+                      const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+                      await updateDoc(docRef, {
+                        staff: staff,
+                      });
+                    } catch (error) {
+                      console.error("Error updating staff: ", error);
+                      alert("Failed to update staff.");
+                    }
+                  }
                 }}
               ></IonIcon>
             </div>
@@ -57,7 +99,11 @@ function StaffManagement() {
         <Space height="25px"></Space>
         <RoundButton
           text="Continue"
-          navigateTo="/your_services"
+          onClick={() => {
+            user
+              ? history.replace("/tabs/settings")
+              : history.push("/your_services");
+          }}
           //dataToPass={dataToPass}
         />
       </div>

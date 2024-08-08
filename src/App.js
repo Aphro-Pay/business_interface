@@ -1,10 +1,15 @@
 import "./App.css";
 import "@ionic/react/css/core.css";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { IonApp, IonRouterOutlet } from "@ionic/react";
+import {
+  IonApp,
+  IonPage,
+  IonRouterOutlet,
+  setupIonicReact,
+} from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Route, Redirect, Switch } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import Splash from "./pages/Splash";
 import LogIn from "./pages/authentication/log_in/LogIn";
 import VerifyOTP from "./pages/authentication/verify_otp/VerifyOTP";
@@ -18,32 +23,55 @@ import YourServices from "./pages/onboarding/your_services/YourServices";
 import StaffManagement from "./pages/onboarding/staff_management/StaffManagement";
 import AddStaffName from "./pages/onboarding/staff_management/AddStaffName";
 import OpeningHours from "./pages/onboarding/business_hours/OpeningHours";
-import Home from "./pages/tabs/home/Home";
 import Tabs from "./pages/tabs/Tabs";
-import AddBooking from "./pages/tabs/bookings/AddBooking";
-import TransactionDetails from "./pages/tabs/payments/TransactionDetails";
-
-import { setupIonicReact } from "@ionic/react";
-import { useState } from "react";
 import Business, { Staff } from "./models/Business";
 import AddServices from "./pages/onboarding/your_services/AddServices";
 import { AuthContext } from "./providers/AuthProvider";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
 import AddStaffPrice from "./pages/onboarding/your_services/AddStaffPrice";
+import { BusinessContext } from "./providers/BusinessProvider";
+import { db } from "./firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 setupIonicReact();
 
 function App() {
-  const [newBusiness, setNewBusiness] = useState(new Business());
-  const { loding, user } = useContext(AuthContext);
+  const { setBusiness } = useContext(BusinessContext);
+  const { user } = useContext(AuthContext);
   const [staff, setStaff] = useState([]);
+  const [service, setService] = useState("");
+  const [duration, setDuration] = useState("");
+  const [notes, setNotes] = useState("");
 
   const addStaffPrice = (staffName, staffPrice) => {
-    console.log("hello");
     setStaff(staff.concat([new Staff(staffName, staffPrice).toMap()]));
-    console.log(staff);
   };
+
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(db, "businesses", user.uid);
+      const unsubscribe = onSnapshot(
+        docRef,
+        (docSnap) => {
+          if (docSnap.exists()) {
+            setBusiness(new Business(docSnap.data()));
+            console.log(docSnap.data());
+          } else {
+            console.log("No such document!");
+          }
+          console.log(false);
+        },
+        (err) => {
+          console.log(err.message);
+          console.log(false);
+        }
+      );
+
+      // Clean up the listener on component unmount
+      return () => unsubscribe();
+    }
+  }, [user, setBusiness]);
 
   return (
     <IonApp>
@@ -81,30 +109,41 @@ function App() {
           <UploadYourLogo />
         </Route>
 
-        <Route
-          path="/business_hours"
-          component={BusinessHours}
-          exact={true}
-        ></Route>
-
-        <Route
-          path="/your_services"
-          component={YourServices}
-          exact={true}
-        ></Route>
-
-        <Route path="/add_service" exact={true}>
-          <AddServices setStaff={setStaff} staff={staff} />
+        <Route path="/business_hours" exact={true}>
+          <IonPage>
+            <BusinessHours />
+          </IonPage>
         </Route>
 
-        <Route
-          path="/staff_management"
-          component={StaffManagement}
-          exact={true}
-        ></Route>
+        <Route path="/your_services" exact={true}>
+          <IonPage>
+            <YourServices />
+          </IonPage>
+        </Route>
+
+        <Route path="/add_service" exact={true}>
+          <AddServices
+            setStaff={setStaff}
+            staff={staff}
+            setService={setService}
+            service={service}
+            setDuration={setDuration}
+            duration={duration}
+            setNotes={setNotes}
+            notes={notes}
+          />
+        </Route>
+
+        <Route path="/staff_management" exact={true}>
+          <IonPage>
+            <StaffManagement />
+          </IonPage>
+        </Route>
 
         <Route path="/add_staff_name" exact={true}>
-          <AddStaffName />
+          <IonPage>
+            <AddStaffName />
+          </IonPage>
         </Route>
 
         <Route path="/add_staff_price" exact={true}>
@@ -120,6 +159,51 @@ function App() {
             <IonReactRouter>
               <Route path="/tabs/:id">
                 <Tabs />
+              </Route>
+              <Route path="/tabs/upload_your_logo" exact={true}>
+                <UploadYourLogo />
+              </Route>
+              <Route path="/tabs/add_staff_name" exact={true}>
+                <AddStaffName />
+              </Route>
+              <Route path="/tabs/set_up_your_business_profile" exact={true}>
+                <SetUpYourBusinessProfile />
+              </Route>
+              <Route
+                path="/tabs/your_services"
+                component={YourServices}
+                exact={true}
+              ></Route>
+              <Route path="/tabs/add_service" exact={true}>
+                <AddServices
+                  setStaff={setStaff}
+                  staff={staff}
+                  setService={setService}
+                  service={service}
+                  setDuration={setDuration}
+                  duration={duration}
+                  setNotes={setNotes}
+                  notes={notes}
+                />
+              </Route>
+              <Route
+                path="/tabs/staff_management"
+                component={StaffManagement}
+                exact={true}
+              ></Route>
+              <Route path="/tabs/add_staff_name" exact={true}>
+                <AddStaffName />
+              </Route>
+              <Route
+                path="/tabs/business_hours"
+                component={BusinessHours}
+                exact={true}
+              ></Route>
+              <Route path="/tabs/opening_hours/:state" exact={true}>
+                <OpeningHours />
+              </Route>
+              <Route path="/tabs/add_staff_price" exact={true}>
+                <AddStaffPrice addStaffPrice={addStaffPrice} />
               </Route>
               <Redirect from="/tabs" to="/tabs/home" exact={true} />
             </IonReactRouter>

@@ -6,35 +6,56 @@ import styles from "./UploadYourLogo.module.css";
 import RoundButton from "../../../components/RoundButton";
 import Space from "../../../components/Space";
 import { BusinessContext } from "../../../providers/BusinessProvider";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { doc, updateDoc } from "firebase/firestore";
+import { db, storage } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 function UploadYourLogo() {
   const { business, setBusiness } = useContext(BusinessContext);
+  const [isLogoChanged, setIsLogoChanged] = useState(false);
+  const { user } = useContext(AuthContext);
   const [logo, setLogo] = useState(business.logo);
+  const history = useHistory();
 
   function handleLogoChange(e) {
     let img = e.target.files[0];
-    let url = URL.createObjectURL(img);
     setLogo(img);
-    business.updateLogo(img);
-    setBusiness(business.clone());
+    console.log(img.type);
+
+    setIsLogoChanged(true);
   }
 
   function handleLogoClick(e) {
     document.getElementById("logo-input").click();
   }
 
-  console.log(business);
   return (
     <IonPage>
       <div className="scaffold">
         <Header
           mainText="Upload your logo"
           subText="Help clients recognise your business. Add a photo of your storefront, logo or team. You can always change this later."
+          type={user ? "tabView" : null}
+          enableBackButton={user ? "y" : null}
+          goBack={
+            user
+              ? () => {
+                  history.replace("/tabs/settings");
+                }
+              : null
+          }
         />
         <div className={styles.uploadImage} onClick={handleLogoClick}>
-          {logo != null && logo != "" ? (
+          {logo !== null && logo !== "" ? (
             <img
-              src={URL.createObjectURL(logo)}
+              src={
+                logo.type?.startsWith("image/")
+                  ? URL.createObjectURL(logo)
+                  : logo
+              }
+              alt="business logo"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
@@ -55,7 +76,39 @@ function UploadYourLogo() {
           style={{ display: "none" }}
         />
         <Space height="30px" />
-        <RoundButton text="Continue" navigateTo="/business_hours" />
+        <RoundButton
+          text="Continue"
+          onClick={
+            user
+              ? async () => {
+                  business.updateLogo(logo);
+                  setBusiness(business.clone());
+                  try {
+                    if (isLogoChanged) {
+                      const imageRef = ref(storage, `${user.id}/logo`);
+
+                      const snapshot = await uploadBytes(imageRef, logo);
+                      const url = await getDownloadURL(snapshot.ref);
+                      business.updateLogo(url);
+                      setBusiness(business.clone());
+                      const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
+                      await updateDoc(docRef, {
+                        logo: url,
+                      });
+                    }
+                    history.replace("/tabs/settings");
+                  } catch (error) {
+                    console.error("Error updating logo: ", error);
+                    alert("Failed to update logo.");
+                  }
+                }
+              : () => {
+                  business.updateLogo(logo);
+                  setBusiness(business.clone());
+                  history.push("/business_hours");
+                }
+          }
+        />
       </div>
     </IonPage>
   );

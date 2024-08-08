@@ -8,7 +8,6 @@ function PublicRoute({ children }) {
   const { user } = useContext(AuthContext);
 
   console.log("Public");
-  console.log(user);
 
   return user ? <Redirect to="/" /> : children;
 }

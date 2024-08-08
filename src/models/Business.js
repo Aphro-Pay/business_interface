@@ -1,11 +1,7 @@
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { auth, db, storage } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  getDownloadURL,
-  ref as storageRef,
-  uploadBytes,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 class Staff {
   constructor(name, price) {
@@ -47,7 +43,7 @@ class Business {
     this.streetAddress = object?.streetAddress ?? "";
     this.city = object?.city ?? "";
     this.country = object?.country ?? "";
-    this.logo = object?.logo ?? "";
+    this.logo = object?.logo ?? null;
     this.businessHours = object?.businessHours ?? {
       Monday: { Status: "Open", Open: "9:00AM", Close: "9:00PM" },
       Tuesday: { Status: "Open", Open: "9:00AM", Close: "9:00PM" },
@@ -128,24 +124,27 @@ class Business {
   async register() {
     let password = localStorage.getItem("password");
 
-    await createUserWithEmailAndPassword(auth, this.email, password).then(
-      (userCredential) => {
-        this.id = userCredential.user.uid;
-      }
-    );
+    try {
+      await createUserWithEmailAndPassword(auth, this.email, password).then(
+        (userCredential) => {
+          this.id = userCredential.user.uid;
+        }
+      );
 
-    if (this.logo != "") {
-      const imageRef = storageRef(storage, `${this.id}/logo`);
-      try {
+      if (this.logo !== "") {
+        const imageRef = ref(storage, `${this.id}/logo`);
+
         const snapshot = await uploadBytes(imageRef, this.logo);
         const url = await getDownloadURL(snapshot.ref);
         this.logo = url;
-      } catch (error) {
-        console.log(error.message);
       }
+
+      await setDoc(doc(db, "businesses", this.id), this.getInfo());
+    } catch (error) {
+      return error.message;
     }
 
-    await setDoc(doc(db, "businesses", this.id), this.getInfo());
+    return false;
   }
 }
 

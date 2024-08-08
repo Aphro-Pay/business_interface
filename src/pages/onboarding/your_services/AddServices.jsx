@@ -1,39 +1,25 @@
-import { IonIcon, IonPage, IonRouterOutlet } from "@ionic/react";
-import React, { useContext, useState } from "react";
-import {
-  useHistory,
-  Link,
-  Route,
-  useRouteMatch,
-  Switch,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { IonIcon, IonPage } from "@ionic/react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Header from "../../../components/Header";
 import Input from "../../../components/Input";
 import RoundButton from "../../../components/RoundButton";
-import { Service, Staff } from "../../../models/Business";
+import { Service } from "../../../models/Business";
 import { BusinessContext } from "../../../providers/BusinessProvider";
-import { add } from "ionicons/icons";
+import { add, closeOutline } from "ionicons/icons";
 import Space from "../../../components/Space";
 import styles from "./YourServices.module.css";
-import AddStaffPrice from "./AddStaffPrice";
-import { IonReactRouter } from "@ionic/react-router";
-import { closeOutline } from "ionicons/icons";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 function AddServices(prop) {
-  let { path, url } = useRouteMatch();
   const { business, setBusiness } = useContext(BusinessContext);
-
-  const [service, setService] = useState("");
-  const [duration, setDuration] = useState("");
-  const [notes, setNotes] = useState("");
+  const { user } = useContext(AuthContext);
 
   let staff = prop.staff ?? [];
 
-  console.log(staff);
-
   const history = useHistory();
 
-  function handleOnClickSave() {
+  async function handleOnClickSave() {
     if (validateInput()) {
       let service = document.getElementById("service").value;
       let duration = document.getElementById("duration").value;
@@ -43,9 +29,16 @@ function AddServices(prop) {
       let newService = new Service(service, staff, duration, notes);
       business.addService(newService);
       setBusiness(business.clone());
-      prop.setStaff([]);
-      history.goBack();
+      restoreDefault();
+      user ? history.replace("/tabs/your_services") : history.goBack();
     }
+  }
+
+  function restoreDefault() {
+    prop.setStaff([]);
+    prop.setService("");
+    prop.setDuration("");
+    prop.setNotes("");
   }
 
   function validateInput() {
@@ -64,7 +57,7 @@ function AddServices(prop) {
       return false;
     }
 
-    if (staff.length == 0) {
+    if (staff.length === 0) {
       alert("Please add a staff");
       return false;
     }
@@ -73,18 +66,17 @@ function AddServices(prop) {
   }
 
   function handleInputChange(event) {
-    const { value, name } = event.target;
-    console.log(name);
+    const { value, id } = event.target;
 
-    switch (name) {
+    switch (id) {
       case "service":
-        setService(value);
+        prop.setService(value);
         break;
       case "duration":
-        setDuration(value);
+        prop.setDuration(value);
         break;
       case "notes":
-        setNotes(value);
+        prop.setNotes(value);
         break;
 
       default:
@@ -95,13 +87,25 @@ function AddServices(prop) {
   return (
     <IonPage>
       <div className="scaffold">
-        <Header mainText="Add Service" />
+        <Header
+          mainText="Add Service"
+          onClick={restoreDefault}
+          type={user ? "tabView" : null}
+          enableBackButton={user ? "y" : null}
+          goBack={
+            user
+              ? () => {
+                  history.replace("/tabs/your_services");
+                }
+              : null
+          }
+        />
         <Input
           hintText="Manicure"
           label="Service"
           id="service"
           onChange={handleInputChange}
-          defaultValue={service}
+          defaultValue={prop.service}
         />
 
         <Input
@@ -109,14 +113,14 @@ function AddServices(prop) {
           label="Duration"
           id="duration"
           onChange={handleInputChange}
-          defaultValue={duration}
+          defaultValue={prop.duration}
         />
         <Input
           hintText="Acrylic"
           label="Notes"
           id="notes"
           onChange={handleInputChange}
-          defaultValue={notes}
+          defaultValue={prop.notes}
         />
         {staff.map((staff, index) => (
           <div key={index}>
@@ -138,15 +142,23 @@ function AddServices(prop) {
             <Space height="25px"></Space>
           </div>
         ))}
-        <div className={styles.addService}>
-          Add Staff <Space width="100%" />
-          <IonIcon
-            icon={add}
-            style={{ fontSize: "30px", color: "#879194" }}
-            onClick={() => history.push("/add_staff_price")}
-          ></IonIcon>
-        </div>
-        <Space height="30px" />
+        {staff.length > 0 && staff[0].name === "All Staff" ? null : (
+          <div>
+            <div className={styles.addService}>
+              Add Staff <Space width="100%" />
+              <IonIcon
+                icon={add}
+                style={{ fontSize: "30px", color: "#879194" }}
+                onClick={() => {
+                  user
+                    ? history.replace("/tabs/add_staff_price")
+                    : history.push("/add_staff_price");
+                }}
+              ></IonIcon>
+            </div>
+            <Space height="30px" />
+          </div>
+        )}
         <RoundButton text="Save" onClick={handleOnClickSave} />
       </div>
     </IonPage>

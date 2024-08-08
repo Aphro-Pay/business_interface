@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 import "../App.css";
@@ -6,6 +6,7 @@ import Space from "./Space";
 
 function Input(prop) {
   const [inputType, setInputType] = useState("password");
+  const [icon, setIcon] = useState("password");
 
   function toggleVisibilty() {
     let i = document.getElementById("passwordInput");
@@ -17,7 +18,7 @@ function Input(prop) {
   }
 
   let suffixIcon =
-    document.getElementById("passwordInput")?.type === "password" ? (
+    inputType == "text" ? (
       <IonIcon
         icon={eyeOffOutline}
         onClick={toggleVisibilty}
@@ -48,7 +49,11 @@ function Input(prop) {
         <Space width="5px" />
         {prop.prefix != null ? <span>{prop.prefix}</span> : null}
         <input
-          type={prop.id === "passwordInput" ? inputType : prop.type ?? "text"}
+          type={
+            prop.name === "password" || prop.name === "confirmedPassword"
+              ? inputType
+              : prop.type ?? "text"
+          }
           placeholder={prop.hintText}
           defaultValue={prop.defaultValue}
           name={prop.name}
@@ -69,7 +74,9 @@ function Input(prop) {
             backgroundColor: prop.backgroundColor,
           }}
         ></input>
-        {prop.id === "passwordInput" ? suffixIcon : null}
+        {prop.name === "password" || prop.name === "confirmedPassword"
+          ? suffixIcon
+          : null}
       </div>
     </div>
   );

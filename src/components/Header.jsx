@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import FloatingButton from "./FloatingButton";
-import {
-  closeOutline,
-  arrowBackOutline,
-  phonePortraitOutline,
-} from "ionicons/icons";
+import { closeOutline, arrowBackOutline } from "ionicons/icons";
 import "../App.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { IonItem, IonRouterLink } from "@ionic/react";
+import { BusinessContext } from "../providers/BusinessProvider";
+import Business from "../models/Business";
 
 function Header(prop) {
+  const { setBusiness } = useContext(BusinessContext);
   const history = useHistory();
-  return prop.type == "tabView" ? (
+  return prop.type === "tabView" ? (
     <div>
       <div className="header">
-        {prop.enableBackButton == "y" && (
+        {prop.enableBackButton === "y" && (
           <FloatingButton
             icon={arrowBackOutline}
             vertical="top"
@@ -22,7 +20,7 @@ function Header(prop) {
             onClick={prop.goBack ?? history.goBack}
           />
         )}
-        {prop.enableIcon == "y" && (
+        {prop.enableIcon === "y" && (
           <FloatingButton
             icon={prop.icon}
             vertical="top"
@@ -38,12 +36,15 @@ function Header(prop) {
   ) : (
     <div>
       <div className="header">
-        {prop.enableBackButton == "n" ? null : (
+        {prop.enableBackButton === "n" ? null : (
           <FloatingButton
             icon={arrowBackOutline}
             vertical="top"
             horizontal="start"
-            onClick={history.goBack}
+            onClick={() => {
+              prop.onClick?.();
+              history.goBack();
+            }}
           />
         )}
         <FloatingButton
@@ -51,9 +52,9 @@ function Header(prop) {
           vertical="top"
           horizontal="end"
           onClick={() => {
-            localStorage.clear();
             history.push("/");
-            window.location.reload();
+            localStorage.clear();
+            setBusiness(new Business());
           }}
         />
       </div>

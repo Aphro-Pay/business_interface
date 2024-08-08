@@ -1,39 +1,59 @@
 import { IonPage } from "@ionic/react";
 import React, { useContext, useState } from "react";
 import Input from "../../../components/Input";
-import {
-  useHistory,
-  useLocation,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Header from "../../../components/Header";
 import RoundButton from "../../../components/RoundButton";
 import { BusinessContext } from "../../../providers/BusinessProvider";
 import Space from "../../../components/Space";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 function AddStaffPrice(prop) {
   const { business, setBusiness } = useContext(BusinessContext);
-  const [selectedStaff, setSelectedStaff] = useState("Any");
+  const { user } = useContext(AuthContext);
+  const [selectedStaff, setSelectedStaff] = useState("All Staff");
   const history = useHistory();
-  //const location = useLocation();
-  //const { callback } = location.state;
-  console.log(business.staff);
 
   function handleOnClickSave() {
-    let name = document.getElementById("name").value;
-    let price = document.getElementById("price").value;
-    prop.addStaffPrice(name, price);
-    setBusiness(business.clone());
-    history.goBack();
+    if (validateInput()) {
+      let name = document.getElementById("name").value;
+      let price = document.getElementById("price").value;
+      prop.addStaffPrice(name, price);
+      setBusiness(business.clone());
+      user ? history.replace("/tabs/add_service") : history.goBack();
+    }
   }
 
   function handleStaffChange(e) {
     setSelectedStaff(e.target.value);
   }
 
+  function validateInput() {
+    let price = document.getElementById("price").value;
+
+    if (price === "") {
+      alert("Please enter a valid price");
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <IonPage>
       <div className="scaffold">
-        <Header mainText="Staff management" />
+        <Header
+          mainText="Staff management"
+          type={user ? "tabView" : null}
+          enableBackButton={user ? "y" : null}
+          goBack={
+            user
+              ? () => {
+                  history.replace("/tabs/add_service");
+                }
+              : null
+          }
+        />
         <label className="input-label" htmlFor="status">
           Name
         </label>
@@ -52,11 +72,10 @@ function AddStaffPrice(prop) {
             flexDirection: "row",
             alignItems: "end",
             backgroundColor: "#e5edf5",
-            fontSize: "14px",
           }}
         >
-          <option key={-1} value={"Any"}>
-            Any
+          <option key={-1} value={"All Staff"}>
+            All Staff
           </option>
           {business.staff.map((staff, index) => (
             <option key={index} value={staff}>

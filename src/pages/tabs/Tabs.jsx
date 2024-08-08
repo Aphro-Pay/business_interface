@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   IonTabs,
   IonTabBar,
@@ -23,8 +23,26 @@ import Payments from "./payments/Payments";
 import Settings from "./settings/Settings";
 import AddBooking from "./bookings/AddBooking";
 import TransactionDetails from "./payments/TransactionDetails";
+import { BusinessContext } from "../../providers/BusinessProvider";
+import Business from "../../models/Business";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { AuthContext } from "../../providers/AuthProvider";
 
 function Tabs() {
+  const { setBusiness } = useContext(BusinessContext);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchBusinessProfile = async () => {
+      await getDoc(doc(db, "businesses", user.uid)).then((docSnap) => {
+        const newData = docSnap.data();
+        setBusiness(new Business(newData));
+      });
+    };
+    fetchBusinessProfile();
+  }, [setBusiness, user]);
+
   return (
     <IonTabs>
       <IonRouterOutlet>

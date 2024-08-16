@@ -8,7 +8,6 @@ import ComingSoon from "../../../components/ComingSoon";
 import VerticalSwiper from "../../../components/VerticalSwiper/VerticalSwiper";
 import styles from "./Home.module.css";
 import { IoMdArrowUp, IoMdArrowDown } from "react-icons/io";
-//import { BarChart } from "@mui/x-charts/BarChart";
 import {
   BarChart,
   Bar,

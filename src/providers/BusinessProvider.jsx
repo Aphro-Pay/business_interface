@@ -12,6 +12,7 @@ const BusinessProvider = ({ children }) => {
   useEffect(() => {
     console.log(business);
     localStorage.setItem("business", JSON.stringify(business));
+    localStorage.setItem("businessId", business.id);
   }, [business]);
 
   return (

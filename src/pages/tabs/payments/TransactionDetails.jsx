@@ -17,7 +17,7 @@ function TransactionDetails() {
   return (
     <IonPage>
       <IonContent>
-        <div className="tab-content">
+        <div className={styles.scaffold}>
           <Header
             mainText="Transaction details"
             type="tabView"
@@ -25,6 +25,7 @@ function TransactionDetails() {
             goBack={() => {
               history.replace("/tabs/payments");
             }}
+            marginTop="30px"
           />
           {details.map((detail) => (
             <div className={styles.flexColumn} key={detail.id}>

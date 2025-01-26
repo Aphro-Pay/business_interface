@@ -74,7 +74,7 @@ ion-fab-button {
 }
 
 .input-label {
-  font-size: 15px;
+  font-size: 18px;
 }
 
 input::placeholder {
@@ -92,6 +92,7 @@ input:focus {
 input {
   border: none;
   background-color: #e5edf5;
+  font-size: 16px;
 }
 
 .clickable-text {
@@ -111,7 +112,7 @@ input {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  min-height: 100dvh;
+  height: 100%;
   padding: 0px 16px 16px 16px;
 }
 

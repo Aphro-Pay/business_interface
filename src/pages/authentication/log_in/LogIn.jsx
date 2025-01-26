@@ -79,7 +79,7 @@ function LogIn() {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header enableBackButton="n" />
         <div className={styles.title}>Log in to your account</div>
         <Space height="50px" />
@@ -87,7 +87,7 @@ function LogIn() {
           <form className={`${styles.column} ${styles.content}`}>
             <Input
               hintText="john.doe@gmail.com"
-              label="Email or Username"
+              label="Email"
               onChange={handleEmailChange}
             />
             <Space height="15px" />

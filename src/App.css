@@ -62,10 +62,10 @@ ion-fab-button {
 }
 
 .input-border {
-  border: 1.5px solid #c0c0c0;
+  border: none;
   border-radius: 5px;
   margin-bottom: 20px;
-  padding: 15px 5px;
+  padding: 10px 5px;
   font-size: 15px;
   display: flex;
   flex-direction: row;
@@ -74,7 +74,7 @@ ion-fab-button {
 }
 
 .input-label {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 input::placeholder {

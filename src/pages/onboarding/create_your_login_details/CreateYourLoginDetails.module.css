@@ -1,0 +1,7 @@
+.scaffold {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0px 30px 16px 28px;
+}

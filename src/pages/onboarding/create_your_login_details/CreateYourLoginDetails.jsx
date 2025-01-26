@@ -3,15 +3,23 @@ import Header from "../../../components/Header";
 import Input from "../../../components/Input";
 import RoundButton from "../../../components/RoundButton";
 import Space from "../../../components/Space";
-import { IonPage } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
 import { BusinessContext } from "../../../providers/BusinessProvider";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import styles from "./CreateYourLoginDetails.module.css";
 
 function CreateYourLoginDetails() {
   const { business, setBusiness } = useContext(BusinessContext);
   const [password, setPassword] = useState();
   const history = useHistory();
   const [confirmedPassword, setConfirmedPassword] = useState();
+  const [requirements, setRequirements] = useState({
+    length: false,
+    lowercase: false,
+    uppercase: false,
+    number: false,
+    special: false,
+  });
 
   function handleOnClickContinue(event) {
     let email = document.getElementById("email").value;
@@ -66,6 +74,14 @@ function CreateYourLoginDetails() {
 
     if (name === "password") {
       setPassword(value);
+      // Check password requirements
+      setRequirements({
+        length: value.length >= 8 && value.length <= 32,
+        lowercase: /[a-z]/.test(value),
+        uppercase: /[A-Z]/.test(value),
+        number: /[0-9]/.test(value),
+        special: /[!@#$%]/.test(value),
+      });
     } else {
       setConfirmedPassword(value);
     }
@@ -73,49 +89,94 @@ function CreateYourLoginDetails() {
 
   return (
     <IonPage>
-      <div className="scaffold">
-        <Header
-          mainText="Create your login details"
-          subText={
-            "Type in your email address  and set a password. \n" +
-            " You can always change this later."
-          }
-        />
-        <Input
-          hintText="Email"
-          label="Email address"
-          id="email"
-          defaultValue={business.getInfo().email}
-        />
-        <Input
-          hintText="7gy7y"
-          label="Set password"
-          id="password"
-          name="password"
-          onChange={handlePasswordChange}
-          defaultValue={localStorage.getItem("password")}
-        />
-        <Input
-          hintText="&bull; &bull; &bull; &bull; &bull;"
-          label="Confirm password"
-          name="confirmedPassword"
-          id="confirmedPassword"
-          onChange={handlePasswordChange}
-          defaultValue={localStorage.getItem("password")}
-        />
-        <Space height="20px" />
-        <div>
-          Your password must include: <br />
-          &#10003; 8-32 characters long <br />
-          &#10003; 1 lowercase character (a-z) <br />
-          &#10003; 1 uppercase character (A-z) <br />
-          &#10003; 1 number <br />
-          &#10003; 1 special character e.g. ! @ # $ %
-        </div>
-        <Space height="50px" />
+      <IonContent>
+        <div className={styles.scaffold}>
+          <Header
+            mainText="Create your login details"
+            subText={
+              "Type in your email address  and set a password. \n" +
+              " You can always change this later."
+            }
+          />
+          <Input
+            hintText="Email"
+            label="Email address"
+            id="email"
+            defaultValue={business.getInfo().email}
+          />
+          <Input
+            hintText="7gy7y"
+            label="Set password"
+            id="password"
+            name="password"
+            onChange={handlePasswordChange}
+            defaultValue={localStorage.getItem("password")}
+          />
+          <Input
+            hintText="&bull; &bull; &bull; &bull; &bull;"
+            label="Confirm password"
+            name="confirmedPassword"
+            id="confirmedPassword"
+            onChange={handlePasswordChange}
+            defaultValue={localStorage.getItem("password")}
+          />
+          <Space height="20px" />
+          <div>
+            Your password must include: <br />
+            <span>
+              <span
+                style={{ color: requirements.length ? "#007AFF" : "#000000" }}
+              >
+                &#10003;
+              </span>
+              {" 8-32 characters long"}
+            </span>{" "}
+            <br />
+            <span>
+              <span
+                style={{
+                  color: requirements.lowercase ? "#007AFF" : "#000000",
+                }}
+              >
+                &#10003;
+              </span>
+              {" 1 lowercase character (a-z)"}
+            </span>{" "}
+            <br />
+            <span>
+              <span
+                style={{
+                  color: requirements.uppercase ? "#007AFF" : "#000000",
+                }}
+              >
+                &#10003;
+              </span>
+              {" 1 uppercase character (A-Z)"}
+            </span>{" "}
+            <br />
+            <span>
+              <span
+                style={{ color: requirements.number ? "#007AFF" : "#000000" }}
+              >
+                &#10003;
+              </span>
+              {" 1 number"}
+            </span>{" "}
+            <br />
+            <span>
+              <span
+                style={{ color: requirements.special ? "#007AFF" : "#000000" }}
+              >
+                &#10003;
+              </span>
+              {" 1 special character e.g. ! @ # $ %"}
+            </span>
+          </div>
+          <Space height="50px" />
 
-        <RoundButton text="Continue" onClick={handleOnClickContinue} />
-      </div>
+          <RoundButton text="Continue" onClick={handleOnClickContinue} />
+        </div>
+      </IonContent>
     </IonPage>
   );
 }

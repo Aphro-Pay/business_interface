@@ -2,13 +2,14 @@ import React, { useContext, useState } from "react";
 import Header from "../../../components/Header";
 import Input from "../../../components/Input";
 import RoundButton from "../../../components/RoundButton";
-import { IonPage } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
 
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { BusinessContext } from "../../../providers/BusinessProvider";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { AuthContext } from "../../../providers/AuthProvider";
+import styles from "./SetUpYourBusinessProfile.module.css";
 
 function SetUpYourBusinessProfile(prop) {
   const { business, setBusiness } = useContext(BusinessContext);
@@ -43,7 +44,7 @@ function SetUpYourBusinessProfile(prop) {
 
   function validateInput() {
     if (businessName === "") {
-      alert("Please enter a valid input");
+      alert("Please enter your business name");
       return false;
     }
 
@@ -79,53 +80,55 @@ function SetUpYourBusinessProfile(prop) {
 
   return (
     <IonPage>
-      <div className="scaffold">
-        <Header
-          mainText="Set up your business profile"
-          subText={
-            "Fill in the details below which will be visible to clients. \n" +
-            "\n You can always change these later."
-          }
-          type={user ? "tabView" : null}
-          enableBackButton={user ? "y" : null}
-          goBack={
-            user
-              ? () => {
-                  history.replace("/tabs/settings");
-                }
-              : null
-          }
-        />
-        <Input
-          label="Business name"
-          id="Business name"
-          name="name"
-          onChange={handleInputChange}
-          defaultValue={businessName}
-        />
-        <Input
-          label="Street address"
-          id="Street address"
-          name="street"
-          onChange={handleInputChange}
-          defaultValue={streetAddress}
-        />
-        <Input
-          label="City"
-          id="City"
-          name="city"
-          onChange={handleInputChange}
-          defaultValue={city}
-        />
-        <Input
-          label="Country"
-          id="Country"
-          name="country"
-          onChange={handleInputChange}
-          defaultValue={country}
-        />
-        <RoundButton text="Continue" onClick={navigate} />
-      </div>
+      <IonContent>
+        <div className={styles.scaffold}>
+          <Header
+            mainText="Set up your business profile"
+            subText={
+              "Fill in the details below which will be visible to clients. \n" +
+              "\n You can always change these later."
+            }
+            type={user ? "tabView" : null}
+            enableBackButton={user ? "y" : null}
+            goBack={
+              user
+                ? () => {
+                    history.replace("/tabs/settings");
+                  }
+                : null
+            }
+          />
+          <Input
+            label="Business name"
+            id="Business name"
+            name="name"
+            onChange={handleInputChange}
+            defaultValue={businessName}
+          />
+          <Input
+            label="Street address"
+            id="Street address"
+            name="street"
+            onChange={handleInputChange}
+            defaultValue={streetAddress}
+          />
+          <Input
+            label="City"
+            id="City"
+            name="city"
+            onChange={handleInputChange}
+            defaultValue={city}
+          />
+          <Input
+            label="Country"
+            id="Country"
+            name="country"
+            onChange={handleInputChange}
+            defaultValue={country}
+          />
+          <RoundButton text="Continue" onClick={navigate} />
+        </div>
+      </IonContent>
     </IonPage>
   );
 }

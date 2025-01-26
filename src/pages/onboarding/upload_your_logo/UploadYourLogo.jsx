@@ -33,7 +33,7 @@ function UploadYourLogo() {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header
           mainText="Upload your logo"
           subText="Help clients recognise your business. Add a photo of your storefront, logo or team. You can always change this later."
@@ -47,27 +47,38 @@ function UploadYourLogo() {
               : null
           }
         />
-        <div className={styles.uploadImage} onClick={handleLogoClick}>
-          {logo !== null && logo !== "" ? (
-            <img
-              src={
-                logo.type?.startsWith("image/")
-                  ? URL.createObjectURL(logo)
-                  : logo
-              }
-              alt="business logo"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          ) : (
-            <div className={styles.uploadImage}>
-              <IonIcon
-                icon={arrowUp}
-                style={{ fontSize: "60px", color: "#879194" }}
-              ></IonIcon>
-              <span>Upload Image</span>
-            </div>
-          )}
+        <div
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            display: "flex",
+          }}
+        >
+          <div onClick={handleLogoClick}>
+            {logo !== null && logo !== "" ? (
+              <img
+                src={
+                  logo.type?.startsWith("image/")
+                    ? URL.createObjectURL(logo)
+                    : logo
+                }
+                alt="business logo"
+                className={styles.img}
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <div className={styles.uploadImage}>
+                <IonIcon
+                  icon={arrowUp}
+                  style={{ fontSize: "60px", color: "#879194" }}
+                ></IonIcon>
+                <span>Upload Image</span>
+              </div>
+            )}
+          </div>
         </div>
+
         <input
           type="file"
           id="logo-input"

@@ -1,7 +1,16 @@
+.scaffold {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0px 30px 16px 28px;
+}
+
 .uploadImage {
   display: flex;
   position: relative;
-  height: 300px;
+  height: 500px;
+  width: 500px;
   flex-direction: column;
   flex: 0.5;
   align-items: center;
@@ -9,6 +18,20 @@
   border: 1.5px dotted #aeb5b8;
   background-color: #f4f7f9;
   color: #879194;
+}
+
+img {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .uploadImage,
+  img {
+    height: 300px;
+    width: 300px;
+  }
 }
 
 input[type="file"]::file-selector-button {

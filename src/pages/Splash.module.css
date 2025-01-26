@@ -19,3 +19,13 @@
   flex: 1;
   padding: 0px 16px;
 }
+
+.img {
+  width: 30%;
+}
+
+@media screen and (max-width: 768px) {
+  .img {
+    width: 80%;
+  }
+}

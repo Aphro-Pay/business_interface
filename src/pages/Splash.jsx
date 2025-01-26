@@ -13,7 +13,7 @@ function Splash() {
             <img
               src="./assets/images/aphro_pay_logo.jpg"
               alt="logo"
-              width="80%"
+              className={styles.img}
             />
             <Space height="16px" />
             <RoundButton text="Log in" navigateTo="/login" />

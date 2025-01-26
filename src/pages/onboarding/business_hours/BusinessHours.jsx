@@ -22,7 +22,7 @@ function BusinessHours() {
       : history.push(`/opening_hours/${e.target.id}`);
   };
   return (
-    <div className="scaffold">
+    <div className={styles.scaffold}>
       <Header
         mainText="Business hours"
         subText="Set your business hours and let clients know when you are available. You can always change this later."

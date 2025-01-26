@@ -13,7 +13,7 @@ import Space from "../../../components/Space";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
-
+import styles from "./BusinessHours.module.css";
 function OpeningHours(prop) {
   const { business, setBusiness } = useContext(BusinessContext);
   const { user } = useContext(AuthContext);
@@ -83,7 +83,32 @@ function OpeningHours(prop) {
       return false;
     }
 
+    // Convert times to 24-hour format for comparison
+    let openTime = convertTo24Hour(open);
+    let closeTime = convertTo24Hour(close);
+
+    if (closeTime <= openTime) {
+      alert("Closing time must be after opening time");
+      return false;
+    }
+
     return true;
+  }
+
+  function convertTo24Hour(time) {
+    let [hours, minutesPeriod] = time.split(":");
+    let minutes = minutesPeriod.slice(0, 2);
+    let period = minutesPeriod.slice(2).toUpperCase();
+
+    hours = parseInt(hours);
+
+    if (period === "PM" && hours !== 12) {
+      hours += 12;
+    } else if (period === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return hours * 60 + parseInt(minutes); // Convert to minutes for easier comparison
   }
 
   function handleStatusChange(e) {
@@ -93,7 +118,7 @@ function OpeningHours(prop) {
   return (
     <IonReactRouter>
       <IonPage>
-        <div className="scaffold">
+        <div className={styles.scaffold}>
           <Header
             mainText="Opening Hours"
             type={user ? "tabView" : null}

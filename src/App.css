@@ -33,7 +33,8 @@
   border-radius: 12px;
   border: none;
   padding: 20px;
-  width: 100%;
+  width: 350px;
+  max-width: 100%;
   background-color: #00388b;
   color: #ffffff;
   font-weight: bold;
@@ -93,6 +94,7 @@ input {
   border: none;
   background-color: #e5edf5;
   font-size: 16px;
+  width: 30px;
 }
 
 .clickable-text {

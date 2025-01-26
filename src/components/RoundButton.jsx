@@ -6,17 +6,25 @@ function RoundButton(prop) {
   const history = useHistory();
 
   return (
-    <button
-      className={"round-button " + prop.className}
-      onClick={(e) => {
-        prop.onClick != null && prop.onClick();
-        prop.navigateTo != null &&
-          history.push(prop.navigateTo, prop.dataToPass);
-        e.preventDefault();
+    <div
+      style={{
+        justifyContent: "center",
+        display: "flex",
+        width: "100%",
       }}
     >
-      {prop.text}
-    </button>
+      <button
+        className={"round-button " + prop.className}
+        onClick={(e) => {
+          prop.onClick != null && prop.onClick();
+          prop.navigateTo != null &&
+            history.push(prop.navigateTo, prop.dataToPass);
+          e.preventDefault();
+        }}
+      >
+        {prop.text}
+      </button>
+    </div>
   );
 }
 

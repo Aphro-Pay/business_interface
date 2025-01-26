@@ -3,13 +3,16 @@ import React from "react";
 import Header from "../../../components/Header";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import ComingSoon from "../../../components/ComingSoon";
+import styles from "./Bookings.module.css";
+import Input from "../../../components/Input";
+import RoundButton from "../../../components/RoundButton";
 
 function AddBooking() {
   const history = useHistory();
   return (
     <IonPage>
       <IonContent>
-        <div className="tab-content">
+        <div className={styles.scaffold}>
           <Header
             mainText="Add Booking"
             type="tabView"
@@ -17,8 +20,8 @@ function AddBooking() {
             goBack={() => {
               history.replace("/tabs/bookings");
             }}
+            marginTop="30px"
           />
-          {/* 
           <Input hintText="Ahmed" label="First name" />
           <Input hintText="Musa" label="Last name" />
           <Input hintText="08027176539" label="Phone number" />
@@ -29,14 +32,7 @@ function AddBooking() {
             onClick={() => {
               history.replace("/tabs/bookings");
             }}
-          />*/}
-
-          <div
-            className="flexColumn"
-            style={{ justifyContent: "center", flex: 0.8 }}
-          >
-            <ComingSoon />
-          </div>
+          />
         </div>
       </IonContent>
     </IonPage>

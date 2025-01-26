@@ -1,0 +1,43 @@
+.card {
+  background-color: #004096;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  position: relative;
+  flex: 1;
+}
+
+.indicator {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.label {
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.percentage {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+}
+
+.positive {
+  color: #4caf50;
+}
+
+.negative {
+  color: #f44336;
+}

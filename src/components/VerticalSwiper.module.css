@@ -1,0 +1,17 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+  padding: 0px 0px;
+}
+
+:global(.swiper-slide) {
+  background: white;
+}
+
+:global(.swiper-pagination) {
+  display: none;
+}
+
+:global(.swiper-wrapper) {
+  height: auto;
+}

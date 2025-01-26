@@ -1,43 +1,25 @@
-import { useRef, useEffect } from "react";
-import { register } from "swiper/element/bundle";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/mousewheel";
 
-register();
+import styles from "./VerticalSwiper.module.css";
 
-function VerticalSwiper() {
-  const swiperElRef = useRef(null);
-
-  useEffect(() => {
-    // listen for Swiper events using addEventListener
-    swiperElRef.current.addEventListener("swiperprogress", (e) => {
-      const [progress] = e.detail;
-      console.log(progress);
-    });
-
-    swiperElRef.current.addEventListener("swiperslidechange", (e) => {
-      console.log("slide changed");
-    });
-  }, []);
-
+const VerticalSwiper = ({ children }) => {
   return (
-    <swiper-container
-      //ref={swiperElRef}
-      //slides-per-view="3"
-      //navigation="true"
-      pagination-clickable="true"
+    <Swiper
       direction="vertical"
-      className="mySwiper"
-      //
-      //freeMode={true}
+      slidesPerView={1}
+      spaceBetween={0}
+      mousewheel={true}
+      className={styles.swiper}
     >
-      <swiper-slide>Slide 1</swiper-slide>
-      <swiper-slide>Slide 2</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-      <swiper-slide>Slide 3</swiper-slide>
-    </swiper-container>
+      {React.Children.map(children, (child, index) => (
+        <SwiperSlide key={index}>{child}</SwiperSlide>
+      ))}
+    </Swiper>
   );
-}
+};
 
 export default VerticalSwiper;

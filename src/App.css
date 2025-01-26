@@ -104,7 +104,7 @@ input {
 }
 
 .header {
-  height: 50px;
+  margin-top: 25px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -121,7 +121,6 @@ input {
 .tab-content {
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 0px 16px 16px 16px;
 }
 

@@ -44,7 +44,7 @@ function YourServices() {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header
           mainText="Your Services"
           subText="Include the price list for your treatments below. You can always change this later."

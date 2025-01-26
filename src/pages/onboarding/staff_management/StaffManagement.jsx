@@ -43,7 +43,7 @@ function StaffManagement() {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header
           mainText="Staff management"
           subText="Add the names of the different professionals at your establishment. You can always change these later."

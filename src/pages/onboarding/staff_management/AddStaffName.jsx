@@ -6,7 +6,7 @@ import RoundButton from "../../../components/RoundButton";
 import { BusinessContext } from "../../../providers/BusinessProvider";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { IonPage } from "@ionic/react";
-
+import styles from "./StaffManagement.module.css";
 function AddStaffName() {
   const { business, setBusiness } = useContext(BusinessContext);
   const { user } = useContext(AuthContext);
@@ -37,7 +37,7 @@ function AddStaffName() {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header
           mainText="Staff management"
           type={user ? "tabView" : null}

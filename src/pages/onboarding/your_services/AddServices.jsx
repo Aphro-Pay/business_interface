@@ -86,7 +86,7 @@ function AddServices(prop) {
 
   return (
     <IonPage>
-      <div className="scaffold">
+      <div className={styles.scaffold}>
         <Header
           mainText="Add Service"
           onClick={restoreDefault}

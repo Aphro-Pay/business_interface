@@ -125,6 +125,7 @@ function Home() {
           <Header
             type="tabView"
             mainText={["Good Day,", <br />, " Hair Comes Trouble! 👋🏾"]}
+            marginTop="0px"
           />
           <div className="flexColumn">
             <div className="flexRow">

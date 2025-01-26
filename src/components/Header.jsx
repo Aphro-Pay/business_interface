@@ -10,7 +10,7 @@ function Header(prop) {
   const { setBusiness } = useContext(BusinessContext);
   const history = useHistory();
   return prop.type === "tabView" ? (
-    <div style={{ marginTop: prop.marginTop }}>
+    <div style={{ marginTop: prop.marginTop ?? "30px" }}>
       <div className="header">
         {prop.enableBackButton === "y" && (
           <FloatingButton
@@ -35,7 +35,7 @@ function Header(prop) {
     </div>
   ) : (
     <div>
-      <div className="header">
+      <div className="header" style={{ marginTop: prop.marginTop ?? "70px" }}>
         {prop.enableBackButton === "n" ? null : (
           <FloatingButton
             icon={arrowBackOutline}

@@ -127,6 +127,7 @@ function Bookings() {
             enableIcon="y"
             icon={addOutline}
             onClick={addBooking}
+            marginTop="0px"
           />
 
           <div className={styles.filterContainer}>

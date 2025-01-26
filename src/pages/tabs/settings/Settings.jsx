@@ -25,7 +25,7 @@ function Settings() {
     <IonPage>
       <IonContent>
         <div className="tab-content">
-          <Header type="tabView" mainText="Settings" />
+          <Header type="tabView" mainText="Settings" marginTop="0px" />
           <div className="flexRow">
             <div
               style={{

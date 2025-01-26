@@ -83,7 +83,7 @@ function Payments() {
     <IonPage>
       <IonContent>
         <div className="tab-content">
-          <Header type="tabView" mainText="Payments" />
+          <Header type="tabView" mainText="Payments" marginTop="0px" />
 
           <div className={styles.filterContainer}>
             <div className={styles.filterGroup}>

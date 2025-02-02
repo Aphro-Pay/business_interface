@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { IonPage, IonIcon } from "@ionic/react";
 import Header from "../../../components/Header";
 import styles from "./StaffManagement.module.css";
@@ -18,28 +18,31 @@ function StaffManagement() {
 
   const staff = business.getInfo().staff;
 
+  const updateDB = useCallback(
+    async (updatedStaff) => {
+      try {
+        const docRef = doc(db, "businesses", user.uid);
+        await updateDoc(docRef, {
+          staff: updatedStaff,
+        });
+      } catch (error) {
+        alert("Failed to update staff.");
+      }
+    },
+    [user]
+  );
+
+  useEffect(() => {
+    if (user) {
+      updateDB(staff);
+    }
+  }, [staff, user, updateDB]);
+
   const addStaffName = () => {
     user
       ? history.replace("/tabs/add_staff_name")
       : history.push("/add_staff_name");
   };
-
-  useEffect(() => {
-    if (user) {
-      async function updateDB() {
-        try {
-          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
-          await updateDoc(docRef, {
-            staff: staff,
-          });
-        } catch (error) {
-          console.error("Error updating staff: ", error);
-          alert("Failed to update staff.");
-        }
-      }
-      updateDB();
-    }
-  }, [staff, user]);
 
   return (
     <IonPage>
@@ -71,15 +74,7 @@ function StaffManagement() {
                   setBusiness(business.clone());
 
                   if (user) {
-                    try {
-                      const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
-                      await updateDoc(docRef, {
-                        staff: staff,
-                      });
-                    } catch (error) {
-                      console.error("Error updating staff: ", error);
-                      alert("Failed to update staff.");
-                    }
+                    updateDB(staff);
                   }
                 }}
               ></IonIcon>

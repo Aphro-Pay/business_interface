@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { IonIcon, IonPage } from "@ionic/react";
 import Header from "../../../components/Header";
 import styles from "./YourServices.module.css";
@@ -15,6 +15,25 @@ function YourServices() {
   const { business, setBusiness } = useContext(BusinessContext);
   const { user } = useContext(AuthContext);
   const history = useHistory();
+  const services = business.getInfo().services;
+
+  const updateDB = useCallback(async () => {
+    try {
+      const docRef = doc(db, "businesses", user.uid);
+      await updateDoc(docRef, {
+        services: services,
+      });
+    } catch (error) {
+      alert("Failed to update services.");
+    }
+  }, [user, services]);
+
+  useEffect(() => {
+    if (user) {
+      updateDB();
+    }
+  }, [user, updateDB]);
+
   const addService = () => {
     user ? history.replace("/tabs/add_service") : history.push("/add_service");
   };
@@ -22,25 +41,6 @@ function YourServices() {
   const dataToPass = {
     mainText: "Onboarding complete!",
   };
-
-  const services = business.getInfo().services;
-
-  useEffect(() => {
-    if (user) {
-      async function updateDB() {
-        try {
-          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
-          await updateDoc(docRef, {
-            services: services,
-          });
-        } catch (error) {
-          console.error("Error updating services: ", error);
-          alert("Failed to update services.");
-        }
-      }
-      updateDB();
-    }
-  }, [services, user]);
 
   return (
     <IonPage>
@@ -77,15 +77,7 @@ function YourServices() {
                       services.splice(index, 1);
                       setBusiness(business.clone());
                       if (user) {
-                        try {
-                          const docRef = doc(db, "businesses", user.uid); // Replace 'collectionName' with your collection name
-                          await updateDoc(docRef, {
-                            services: services,
-                          });
-                        } catch (error) {
-                          console.error("Error updating services: ", error);
-                          alert("Failed to update services.");
-                        }
+                        updateDB();
                       }
                     }}
                   ></IonIcon>

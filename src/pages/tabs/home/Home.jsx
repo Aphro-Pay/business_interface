@@ -4,7 +4,6 @@ import Header from "../../../components/Header";
 import moment from "moment";
 import { calendarNumberOutline, chevronDownOutline } from "ionicons/icons";
 import Space from "../../../components/Space";
-import ComingSoon from "../../../components/ComingSoon";
 import VerticalSwiper from "../../../components/VerticalSwiper";
 import AppointmentCard from "../../../components/AppointmentCard";
 import MetricsCard from "../../../components/MetricsCard";
@@ -124,7 +123,11 @@ function Home() {
         <div className="tab-content">
           <Header
             type="tabView"
-            mainText={["Good Day,", <br />, " Hair Comes Trouble! 👋🏾"]}
+            mainText={[
+              "Good Day,",
+              <br key="break" />,
+              " Hair Comes Trouble! 👋🏾",
+            ]}
             marginTop="0px"
           />
           <div className="flexColumn">

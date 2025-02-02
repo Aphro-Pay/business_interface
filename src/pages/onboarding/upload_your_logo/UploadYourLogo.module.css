@@ -9,8 +9,8 @@
 .uploadImage {
   display: flex;
   position: relative;
-  height: 500px;
-  width: 500px;
+  height: 400px;
+  width: 400px;
   flex-direction: column;
   flex: 0.5;
   align-items: center;
@@ -21,8 +21,8 @@
 }
 
 img {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   object-fit: cover;
 }
 

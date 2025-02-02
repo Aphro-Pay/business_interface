@@ -1,11 +1,4 @@
-import {
-  IonPage,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
-  IonContent,
-  IonIcon,
-} from "@ionic/react";
+import { IonPage, IonContent, IonIcon } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
 import { chevronDownOutline } from "ionicons/icons";
@@ -17,18 +10,12 @@ function Payments() {
   const history = useHistory();
   const [selectedMethod, setSelectedMethod] = useState("all");
   const [selectedDate, setSelectedDate] = useState("all");
-  const [selectedTreatment, setSelectedTreatment] = useState("all");
   const [showMethodDropdown, setShowMethodDropdown] = useState(false);
   const [showDateDropdown, setShowDateDropdown] = useState(false);
-  const [showTreatmentDropdown, setShowTreatmentDropdown] = useState(false);
   const [selectedMethodText, setSelectedMethodText] = useState("Method");
   const [selectedDateText, setSelectedDateText] = useState("Date");
-  const [selectedTreatmentText, setSelectedTreatmentText] =
-    useState("Treatment");
-
   const methodOptions = ["Card", "Cash", "Transfer"];
   const dateOptions = ["Today", "This Week", "This Month"];
-  const treatmentOptions = ["Manicure", "Pedicure", "Hair Cut"];
 
   const mockPayments = [
     {

@@ -20,7 +20,6 @@ function Settings() {
     auth.signOut();
   }
 
-  console.log(business?.logo);
   return (
     <IonPage>
       <IonContent>

@@ -22,12 +22,11 @@ function UploadYourLogo() {
   function handleLogoChange(e) {
     let img = e.target.files[0];
     setLogo(img);
-    console.log(img.type);
 
     setIsLogoChanged(true);
   }
 
-  function handleLogoClick(e) {
+  function handleLogoClick() {
     document.getElementById("logo-input").click();
   }
 
@@ -109,7 +108,6 @@ function UploadYourLogo() {
                     }
                     history.replace("/tabs/settings");
                   } catch (error) {
-                    console.error("Error updating logo: ", error);
                     alert("Failed to update logo.");
                   }
                 }

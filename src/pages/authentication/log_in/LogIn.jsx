@@ -37,12 +37,13 @@ function LogIn() {
         // Signed in
         const user = userCredential.user;
         history.push("/tabs/home");
-
+        // eslint-disable-next-line no-console
         console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        // eslint-disable-next-line no-console
         console.log(errorCode, errorMessage);
         if (error.code === "auth/multi-factor-auth-required") {
           /*

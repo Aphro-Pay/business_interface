@@ -56,14 +56,17 @@ function App() {
         (docSnap) => {
           if (docSnap.exists()) {
             setBusiness(new Business(docSnap.data()));
-            console.log(docSnap.data());
           } else {
+            // eslint-disable-next-line no-console
             console.log("No such document!");
           }
+          // eslint-disable-next-line no-console
           console.log(false);
         },
         (err) => {
+          // eslint-disable-next-line no-console
           console.log(err.message);
+          // eslint-disable-next-line no-console
           console.log(false);
         }
       );

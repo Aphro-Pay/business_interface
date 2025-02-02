@@ -5,8 +5,6 @@ import { AuthContext } from "../providers/AuthProvider";
 function PublicRoute({ children }) {
   const { user } = useContext(AuthContext);
 
-  console.log("Public");
-
   return user ? <Redirect to="/" /> : children;
 }
 

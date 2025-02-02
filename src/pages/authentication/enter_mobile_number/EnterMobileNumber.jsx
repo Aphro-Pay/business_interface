@@ -15,7 +15,7 @@ function EnterMobileNumber() {
     setPhone(event.target.value);
   };
 
-  const registerMobileNumber = async (e) => {
+  const registerMobileNumber = async () => {
     //e.preventDefault();
     try {
       //Form fields validation
@@ -45,6 +45,7 @@ function EnterMobileNumber() {
         alert("Please fill all the fields");
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   };

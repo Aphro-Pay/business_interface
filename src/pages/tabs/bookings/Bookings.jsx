@@ -1,23 +1,13 @@
-import {
-  IonPage,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
-  IonContent,
-  IonIcon,
-} from "@ionic/react";
-import React, { useContext, useState, useEffect } from "react";
+import { IonPage, IonContent, IonIcon } from "@ionic/react";
+import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
 import { addOutline, chevronDownOutline } from "ionicons/icons";
 import styles from "./Bookings.module.css";
 import Space from "../../../components/Space";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ComingSoon from "../../../components/ComingSoon";
-import { BusinessContext } from "../../../providers/BusinessProvider";
 import moment from "moment";
 
 function Bookings() {
-  const { business } = useContext(BusinessContext);
   const history = useHistory();
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);

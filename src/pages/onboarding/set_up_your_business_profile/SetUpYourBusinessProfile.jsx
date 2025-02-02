@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { AuthContext } from "../../../providers/AuthProvider";
 import styles from "./SetUpYourBusinessProfile.module.css";
 
-function SetUpYourBusinessProfile(prop) {
+function SetUpYourBusinessProfile() {
   const { business, setBusiness } = useContext(BusinessContext);
   const [businessName, setBusinessName] = useState(business.businessName);
   const [streetAddress, setStreetAddress] = useState(business.streetAddress);
@@ -69,7 +69,6 @@ function SetUpYourBusinessProfile(prop) {
           });
           history.replace("/tabs/settings");
         } catch (error) {
-          console.error("Error updating profile: ", error);
           alert("Failed to update business profile.");
         }
       } else {

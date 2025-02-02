@@ -21,7 +21,7 @@ function CreateYourLoginDetails() {
     special: false,
   });
 
-  function handleOnClickContinue(event) {
+  function handleOnClickContinue() {
     let email = document.getElementById("email").value;
     if (validateInput()) {
       localStorage.setItem("password", password);

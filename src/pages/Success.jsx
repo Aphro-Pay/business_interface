@@ -6,7 +6,7 @@ import Space from "../components/Space";
 import { BusinessContext } from "../providers/BusinessProvider";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function Success(prop) {
+function Success() {
   const { business } = useContext(BusinessContext);
   const history = useHistory();
 
@@ -28,7 +28,6 @@ function Success(prop) {
   }, [business, state]);
 
   window.onpopstate = () => {
-    console.log("here");
     history.go("/");
   };
 

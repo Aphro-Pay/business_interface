@@ -14,7 +14,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import styles from "./BusinessHours.module.css";
-function OpeningHours(prop) {
+function OpeningHours() {
   const { business, setBusiness } = useContext(BusinessContext);
   const { user } = useContext(AuthContext);
   const history = useHistory();
@@ -26,7 +26,7 @@ function OpeningHours(prop) {
     businessHours[state].Status
   );
 
-  async function handleOnClickSave(e) {
+  async function handleOnClickSave() {
     let open = null;
     let close = null;
 
@@ -58,7 +58,6 @@ function OpeningHours(prop) {
           });
           history.replace("/tabs/business_hours");
         } catch (error) {
-          console.error("Error updating hour: ", error);
           alert("Failed to update business hours.");
         }
       } else {

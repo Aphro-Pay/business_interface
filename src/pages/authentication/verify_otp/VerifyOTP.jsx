@@ -27,10 +27,12 @@ function VerifyOTP() {
     setUserInput(userInput);
   };
 
-  const handleVerifyInput = async (event) => {
+  const handleVerifyInput = async () => {
     let otpInput = userInput.join("");
 
+    // eslint-disable-next-line no-console
     console.log(verification);
+    // eslint-disable-next-line no-console
     console.log(otpInput);
     try {
       //get the OTP from user nad pass in PhoneAuthProvider
@@ -38,17 +40,19 @@ function VerifyOTP() {
       const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
 
       const user = auth.currentUser;
+      // eslint-disable-next-line no-console
       console.log(user);
       /* Enrolling the user in the multi-factor authentication. */
       await multiFactor(user)
         .enroll(multiFactorAssertion, "phone")
-        .then((enrollment) => {
+        .then(() => {
           history.push("/tabs/home");
         });
       /* Removing the user from localStorage. */
       //localStorage.removeItem("user");
     } catch (err) {
       //toast.error("Invalid OTP");
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   };
@@ -73,6 +77,7 @@ function VerifyOTP() {
       /* Decrypting the phone number that was encrypted in the previous step. */
       //const decryptedphone = cryptr.decrypt(getdata.phone);
       const phone = getdata.phone;
+      // eslint-disable-next-line no-console
       console.log(phone);
       /* Creating a new recaptcha verifier. */
       const recaptchaVerifier = new RecaptchaVerifier(auth, "2fa-captcha", {

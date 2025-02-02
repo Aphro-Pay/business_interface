@@ -2,7 +2,6 @@ import { IonContent, IonPage } from "@ionic/react";
 import React from "react";
 import Header from "../../../components/Header";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ComingSoon from "../../../components/ComingSoon";
 import styles from "./Bookings.module.css";
 import Input from "../../../components/Input";
 import RoundButton from "../../../components/RoundButton";

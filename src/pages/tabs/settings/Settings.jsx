@@ -106,21 +106,25 @@ function Settings() {
           </div>
           <Space height="40px" />
           <div className="flexRow">
-            <div className={styles.setting}>Payment settings</div>
+            <div className={`${styles.setting} ${styles.disabled}`}>
+              Payment settings
+            </div>
             <Space flexGrow="1"></Space>
             <IonIcon
               icon={arrowForward}
-              style={{ fontSize: "20px", color: "#879194" }}
+              style={{ fontSize: "20px", color: "#C4C4C4" }}
               onClick={() => {}}
             ></IonIcon>
           </div>
           <Space height="40px" />
           <div className="flexRow">
-            <div className={styles.setting}>Support</div>
+            <div className={`${styles.setting} ${styles.disabled}`}>
+              Support
+            </div>
             <Space flexGrow="1"></Space>
             <IonIcon
               icon={arrowForward}
-              style={{ fontSize: "20px", color: "#879194" }}
+              style={{ fontSize: "20px", color: "#C4C4C4" }}
               onClick={() => {}}
             ></IonIcon>
           </div>

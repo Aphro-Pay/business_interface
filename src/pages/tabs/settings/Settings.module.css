@@ -21,3 +21,8 @@
   color: #456ea1;
   font-size: 14px;
 }
+
+.disabled {
+  color: #c4c4c4; /* Grey color for disabled text */
+  cursor: not-allowed; /* Changes cursor to indicate item is not clickable */
+}

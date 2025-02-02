@@ -121,6 +121,7 @@ function UploadYourLogo() {
           }
         />
       </div>
+      <Space height="50px" />
     </IonPage>
   );
 }

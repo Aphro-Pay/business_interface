@@ -81,10 +81,12 @@ function Tabs() {
           <IonLabel>Bookings</IonLabel>
         </IonTabButton>
 
+        {/* 
         <IonTabButton tab="payments" href="/tabs/payments">
           <IonIcon icon={cashOutline} />
           <IonLabel>Payments</IonLabel>
         </IonTabButton>
+        */}
 
         <IonTabButton tab="settings" href="/tabs/settings">
           <IonIcon icon={personOutline} />

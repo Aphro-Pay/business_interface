@@ -3,7 +3,15 @@ import { IonIcon } from "@ionic/react";
 import { callOutline } from "ionicons/icons";
 import styles from "./AppointmentCard.module.css";
 
-const AppointmentCard = ({ time, client, treatment, staff, index, total }) => {
+const AppointmentCard = ({
+  time,
+  client,
+  treatment,
+  staff,
+  index,
+  total,
+  period,
+}) => {
   const renderDots = () => {
     return Array(total)
       .fill()
@@ -20,7 +28,7 @@ const AppointmentCard = ({ time, client, treatment, staff, index, total }) => {
       <div className={styles.content}>
         <div className={styles.timeContainer}>
           <span className={styles.time}>{time}</span>
-          <span className={styles.period}>AM</span>
+          <span className={styles.period}>{period}</span>
         </div>
         <div className={styles.details}>
           <div className={styles.row}>Client: {client}</div>

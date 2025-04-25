@@ -15,6 +15,7 @@ function RoundButton(prop) {
     >
       <button
         className={"round-button " + prop.className}
+        style={prop.style}
         onClick={(e) => {
           prop.onClick != null && prop.onClick();
           prop.navigateTo != null &&

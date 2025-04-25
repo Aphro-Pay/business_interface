@@ -1,17 +1,31 @@
 import { IonPage, IonIcon, IonContent } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../../../components/Header";
 import moment from "moment";
-import { calendarNumberOutline, chevronDownOutline } from "ionicons/icons";
+import {
+  calendarNumberOutline,
+  chevronDownOutline,
+  copyOutline,
+  addOutline,
+} from "ionicons/icons";
 import Space from "../../../components/Space";
 import VerticalSwiper from "../../../components/VerticalSwiper";
 import AppointmentCard from "../../../components/AppointmentCard";
 import MetricsCard from "../../../components/MetricsCard";
 import styles from "./Home.module.css";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { db } from "../../../firebase";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
 function Home() {
+  const history = useHistory();
+  const { user } = useContext(AuthContext);
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"));
+  const [copied, setCopied] = useState(false);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const metricsData = {
     January: {
@@ -96,26 +110,79 @@ function Home() {
 
   const months = moment.months();
 
-  const appointments = [
-    {
-      time: "10:30",
-      client: "Paul Okoye",
-      treatment: "Hair cut",
-      staff: "Ololade",
-    },
-    {
-      time: "11:45",
-      client: "John Doe",
-      treatment: "Beard Trim",
-      staff: "Michael",
-    },
-    {
-      time: "2:15",
-      client: "Sarah Johnson",
-      treatment: "Hair Styling",
-      staff: "Ololade",
-    },
-  ];
+  useEffect(() => {
+    const fetchTodayBookings = async () => {
+      if (!user) return;
+
+      try {
+        const today = moment().startOf("day");
+        const tomorrow = moment().add(1, "day").startOf("day");
+
+        const bookingsRef = collection(db, "businesses", user.uid, "bookings");
+        const q = query(
+          bookingsRef,
+          where("date", ">=", today.toDate()),
+          where("date", "<", tomorrow.toDate()),
+          orderBy("date", "asc")
+        );
+
+        const querySnapshot = await getDocs(q);
+        const todayBookings = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            time: moment(data.date.toDate()).format("h:mm"),
+            client: `${data.firstName} ${data.lastName}`,
+            treatment: data.service.service,
+            staff: data.staff,
+            period: moment(data.date.toDate()).format("A"),
+          };
+        });
+
+        setAppointments(todayBookings);
+      } catch (error) {
+        console.error("Error fetching today's bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTodayBookings();
+  }, [user]);
+
+  const handleCopyClick = () => {
+    const url = `https://book-aphropay.web.app/${localStorage.getItem(
+      "businessId"
+    )}`;
+
+    // Create a temporary input element
+    const tempInput = document.createElement("input");
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+
+    // Select the text
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+    try {
+      // Try using the Clipboard API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        });
+      } else {
+        // Fallback for older browsers
+        document.execCommand("copy");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    } finally {
+      // Clean up
+      document.body.removeChild(tempInput);
+    }
+  };
 
   return (
     <IonPage>
@@ -130,31 +197,70 @@ function Home() {
             ]}
             marginTop="0px"
           />
+
           <div className="flexColumn">
             <div className="flexRow">
               <IonIcon icon={calendarNumberOutline}></IonIcon>
               <Space width="5px" />
               <span style={{ fontWeight: "600" }}>{moment().format("LL")}</span>
             </div>
-            <h4 style={{ fontWeight: "500" }}>Upcoming appointments</h4>
-            <div
-              style={{
-                height: "150px",
-                overflow: "hidden",
-              }}
-            >
-              <VerticalSwiper>
-                {appointments.map((appointment, index) => (
-                  <AppointmentCard
-                    key={index}
-                    {...appointment}
-                    index={index}
-                    total={appointments.length}
-                  />
-                ))}
-              </VerticalSwiper>
+            <Space height="10px" />
+            <div className="flexRow">
+              Share this link with your clients to book appointments:
             </div>
+            <div
+              className="flexRow"
+              style={{ alignItems: "center", gap: "10px" }}
+            >
+              <a
+                href={`https://book-aphropay.web.app/${localStorage.getItem(
+                  "businessId"
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#007AFF", textDecoration: "none" }}
+              >
+                https://book-aphropay.web.app/
+                {localStorage.getItem("businessId")}
+              </a>
+              <IonIcon
+                icon={copyOutline}
+                style={{ cursor: "pointer", color: "#007AFF" }}
+                onClick={handleCopyClick}
+              />
+              {copied && (
+                <span style={{ color: "#007AFF", fontSize: "12px" }}>
+                  Copied!
+                </span>
+              )}
+            </div>
+            <h4 style={{ fontWeight: "500" }}>Upcoming appointments</h4>
+            {appointments.length > 0 ? (
+              <div
+                style={{
+                  height: "150px",
+                  overflow: "hidden",
+                }}
+              >
+                <VerticalSwiper>
+                  {appointments.map((appointment, index) => (
+                    <AppointmentCard
+                      key={index}
+                      {...appointment}
+                      index={index}
+                      total={appointments.length}
+                    />
+                  ))}
+                </VerticalSwiper>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", color: "#666" }}>
+                👑 <br />
+                Stay calm <br /> No appointments today
+              </div>
+            )}
             <Space height="20px" />
+            {/*
             <div
               className="flexRow"
               style={{
@@ -205,6 +311,7 @@ function Home() {
                 isPositive={currentMetrics.clientsPercent > 0}
               />
             </div>
+            */}
           </div>
         </div>
       </IonContent>

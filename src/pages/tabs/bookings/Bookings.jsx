@@ -1,14 +1,21 @@
 import { IonPage, IonContent, IonIcon } from "@ionic/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Header from "../../../components/Header";
 import { addOutline, chevronDownOutline } from "ionicons/icons";
 import styles from "./Bookings.module.css";
 import Space from "../../../components/Space";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import moment from "moment";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { BusinessContext } from "../../../providers/BusinessProvider";
+import { db } from "../../../firebase";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import Booking from "../../../models/Booking";
 
 function Bookings() {
   const history = useHistory();
+  const { user } = useContext(AuthContext);
+  const { business } = useContext(BusinessContext);
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showDateDropdown, setShowDateDropdown] = useState(false);
@@ -19,32 +26,47 @@ function Bookings() {
     useState("Treatment");
   const [selectedDate, setSelectedDate] = useState("all");
   const [selectedTreatment, setSelectedTreatment] = useState("all");
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const statusOptions = ["All", "Upcoming", "Past"];
   const dateOptions = ["Today", "This Week", "This Month"];
-  const treatmentOptions = ["Manicure", "Pedicure", "Hair Cut"]; // Add your treatments here
+  const treatmentOptions = business.services.map((service) => service.service);
 
-  //const bookings = business.bookings ?? [];
+  useEffect(() => {
+    const fetchBookings = async () => {
+      if (!user) return;
 
-  const mockBookings = [
-    {
-      date: "Aug 10",
-      treatment: "Manicure",
-      staff: "Bukola",
-      client: "Ice Prince",
-      phone: "08033019874",
-      status: "past",
-    },
-    {
-      date: "Aug 14",
-      treatment: "Manicure",
-      staff: "Bukola",
-      client: "Lamii Wonder",
-      phone: "08033019874",
-      status: "upcoming",
-    },
-    // Add more mock bookings as needed
-  ];
+      try {
+        const bookingsRef = collection(db, "businesses", user.uid, "bookings");
+        const q = query(bookingsRef, orderBy("date", "desc"));
+
+        const querySnapshot = await getDocs(q);
+        var fetchedBookings = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          console.log(data);
+          return {
+            date: moment(data.date.toDate()).format("MMM DD"),
+            treatment: data.service.service,
+            status: moment(data.date.toDate()).isAfter(moment())
+              ? "upcoming"
+              : "past",
+            phone: data.phoneNumber,
+            client: data.firstName + " " + data.lastName,
+            staff: data.staff,
+          };
+        });
+
+        setBookings(fetchedBookings);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [user]);
 
   const handleDateFilter = (bookingDate, filter) => {
     const today = moment().format("MMM DD");
@@ -71,7 +93,7 @@ function Bookings() {
     setSelectedTreatmentText("Treatment");
   };
 
-  const bookings = mockBookings.filter((booking) => {
+  const filteredBookings = bookings.filter((booking) => {
     const statusMatch =
       selectedStatus === "all" || booking.status === selectedStatus;
     const treatmentMatch =
@@ -84,16 +106,6 @@ function Bookings() {
   const addBooking = () => {
     history.push("/tabs/bookings/add");
   };
-  /*
-  const daysOfTheWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];*/
 
   // Close all dropdowns when clicking outside
   useEffect(() => {
@@ -106,6 +118,28 @@ function Bookings() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  if (loading) {
+    return (
+      <IonPage>
+        <IonContent>
+          <div className="tab-content">
+            <Header
+              mainText="Bookings"
+              type="tabView"
+              enableIcon="y"
+              icon={addOutline}
+              onClick={addBooking}
+              marginTop="0px"
+            />
+            <div style={{ textAlign: "center", color: "#666" }}>
+              Loading bookings...
+            </div>
+          </div>
+        </IonContent>
+      </IonPage>
+    );
+  }
 
   return (
     <IonPage>
@@ -239,9 +273,9 @@ function Bookings() {
           </div>
 
           <Space height="10px" />
-          {bookings.length > 0 ? (
-            bookings.map((booking, index) => (
-              <div className={styles.flexRow} key={index}>
+          {filteredBookings.length > 0 ? (
+            filteredBookings.map((booking) => (
+              <div className={styles.flexRow} key={booking.id}>
                 <div style={{ display: "inline-block" }}>
                   <div className={styles.day}>{booking.date}</div>
                   <div className={styles.time}>

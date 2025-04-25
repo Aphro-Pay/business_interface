@@ -5,7 +5,7 @@ import RoundButton from "../../../components/RoundButton";
 import Input from "../../../components/Input";
 import ClickableText from "../../../components/ClickableText";
 import Space from "../../../components/Space";
-import { IonPage, IonContent } from "@ionic/react";
+import { IonPage, IonContent, IonAlert } from "@ionic/react";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -17,6 +17,9 @@ import Header from "../../../components/Header";
 function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
 
   const handleEmailChange = (event) => {
@@ -28,59 +31,63 @@ function LogIn() {
   };
 
   async function SignIn() {
-    //let resolver;
-    //let multiFactorHints;
-    //const res = await createUserWithEmailAndPassword(auth, email, password);
-    //await sendEmailVerification(auth.currentUser);
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password");
+      setShowError(true);
+      return;
+    }
+
+    setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
+        localStorage.setItem("businessId", user.uid);
         history.push("/tabs/home");
-        // eslint-disable-next-line no-console
-        console.log(user);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // eslint-disable-next-line no-console
-        console.log(errorCode, errorMessage);
-        if (error.code === "auth/multi-factor-auth-required") {
-          /*
-          resolver = getMultiFactorResolver(auth, error);
-          // Show UI to let user select second factor.
-          multiFactorHints = resolver.hints;
-          const phoneInfoOptions = {
-            multiFactorHint: resolver.hints[selectedIndex],
-            session: resolver.session,
-          };
-          const phoneAuthProvider = new PhoneAuthProvider(auth);
-          // Send SMS verification code
-          return phoneAuthProvider
-            .verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
-            .then(function (verificationId) {
-              // Ask user for the SMS verification code. Then:
-              const cred = PhoneAuthProvider.credential(
-                verificationId,
-                verificationCode
-              );
-              const multiFactorAssertion =
-                PhoneMultiFactorGenerator.assertion(cred);
-              // Complete sign-in.
-              return resolver.resolveSignIn(multiFactorAssertion);
-            })
-            .then(function (userCredential) {
-              // User successfully signed in with the second factor phone number.
-            });*/
-        } else {
-          // Handle other errors.
+        let message = "An error occurred during login. Please try again.";
+
+        console.log(error.code);
+
+        switch (error.code) {
+          case "auth/invalid-credential":
+            message = "Invalid email or password.";
+            break;
+          case "auth/user-disabled":
+            message = "This account has been disabled.";
+            break;
+          case "auth/user-not-found":
+            message = "No account found with this email.";
+            break;
+          case "auth/wrong-password":
+            message = "Incorrect password.";
+            break;
+          case "auth/too-many-requests":
+            message = "Too many failed attempts. Please try again later.";
+            break;
+          case "auth/network-request-failed":
+            message = "Network error. Please check your connection.";
+            break;
         }
+
+        setErrorMessage(message);
+        setShowError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   return (
     <IonPage>
       <IonContent>
+        <IonAlert
+          isOpen={showError}
+          onDidDismiss={() => setShowError(false)}
+          header="Login Error"
+          message={errorMessage}
+          buttons={["OK"]}
+        />
         <div className={styles.scaffold}>
           <Header enableBackButton="n" />
           <div className={styles.title}>Log in to your account</div>
@@ -111,9 +118,13 @@ function LogIn() {
               />
               <Space height="15px" />
               <RoundButton
-                text="Log in"
+                text={isLoading ? "Logging in..." : "Log in"}
                 onClick={SignIn}
-                //navigateTo="/enter_mobile_number"
+                disabled={isLoading}
+                style={{
+                  opacity: isLoading ? 0.7 : 1,
+                  backgroundColor: isLoading ? "#808080" : undefined,
+                }}
               />
             </form>
             <Space height="15px" />

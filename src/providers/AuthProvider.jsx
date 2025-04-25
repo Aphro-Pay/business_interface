@@ -16,7 +16,12 @@ const AuthProvider = ({ children }) => {
 
   const loginUser = (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
+        const user = userCredential.user;
+        localStorage.setItem("businessId", user.uid);
+      }
+    );
   };
 
   const logOut = () => {
